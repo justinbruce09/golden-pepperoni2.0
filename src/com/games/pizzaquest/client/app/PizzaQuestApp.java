@@ -1,4 +1,6 @@
 package com.games.pizzaquest.client.app;
+import com.games.pizzaquest.textparser.TextParser;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,6 +10,8 @@ public class PizzaQuestApp {
 
         //scanner for the game
         private Scanner scanner = new Scanner(System.in);
+        //text parser for users to use
+        TextParser tp = new TextParser();
         //path for some ascii art
         private static final String bannerFilePath = "data/WelcomeSplash.txt";
         //track turn may be moved to player
@@ -18,9 +22,13 @@ public class PizzaQuestApp {
 
 
         public void execute() {
-                if (!isGameOver) {
+                //temporaily put in a 1 iteration loop to test user input
+                while(turns <1) {
                         welcome();
+                        gameInstructions();
                         System.out.println(enterName());
+                        tp.parse(scanner.nextLine());
+                        turns++;
                 }
         }
         private void welcome() {
