@@ -7,5 +7,6 @@ class main {
         System.out.println("HelloWorld");
         PizzaQuestApp app = new PizzaQuestApp();
         app.execute();
+        app.gameInstructions();
     }
 }

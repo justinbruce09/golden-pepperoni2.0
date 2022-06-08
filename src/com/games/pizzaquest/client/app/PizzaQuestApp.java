@@ -31,10 +31,17 @@ public class PizzaQuestApp {
                         e.printStackTrace();
                 }
         }
+
+        public void gameInstructions() {
+                System.out.println("You must use the following commands to navigate: " +
+                        "\"go [direction(North, West, South, East)]\" to move & " +
+                        "\"get [item]\" to retrieve an item");
+
+        }
         private String enterName() {
                 System.out.println("Please enter your name: ");
                 String playerName = scanner.nextLine();
-                return playerName;
+                return ("Ciao " + playerName);
         }
 
         private void quitGame() {
