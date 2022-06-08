@@ -37,4 +37,10 @@ public class PizzaQuestApp {
                 return playerName;
         }
 
+        private void quitGame() {
+                System.out.println("You'll always have a pizza our heart ... Goodbye!");
+                isGameOver = true;
+                System.exit(0);
+        }
+
 }
