@@ -14,6 +14,7 @@ class main {
         System.out.println("HelloWorld");
         PizzaQuestApp app = new PizzaQuestApp();
         app.execute();
+        app.gameInstructions();
     }
     Location location = new Location("Colosseum");
     Player player = new Player(Collections.emptySet(), location);
