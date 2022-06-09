@@ -19,6 +19,15 @@ public class PizzaQuestApp {
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=1;
+
+        public boolean isGameOver() {
+                return isGameOver;
+        }
+
+        public void setGameOver(boolean gameOver) {
+                isGameOver = gameOver;
+        }
+
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
         private String userInput;
@@ -57,7 +66,7 @@ public class PizzaQuestApp {
 
         private void quitGame() {
                 System.out.println("You'll always have a pizza our heart ... Goodbye!");
-                isGameOver = true;
+                setGameOver(true);
                 System.exit(0);
         }
         private void parse(String userInput) {
@@ -75,22 +84,22 @@ public class PizzaQuestApp {
                                 quitGame();
                                 break;
                         case "go":
-                                go(verbAndNounList); // send to method to process next part of command
+                                //go(verbAndNounList); // send to method to process next part of command
 
                                 break;
                         case "look":
-                                look(); //player location or item  description printed
+                                //look(); //player location or item  description printed
 
                                 break;
                         case "take":
-                                addItem(); //take item from room if possible
+                                //addItem(); //take item from room if possible
 
                                 break;
                         case "give":
-                                removeItem();
+                                //removeItem();
                                 break;
                         case "inventory":
-                                printInventory(); // prints your inventory
+                                //printInventory(); // prints your inventory
 
                                 break;
                         default:
