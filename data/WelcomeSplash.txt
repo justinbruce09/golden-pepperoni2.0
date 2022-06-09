@@ -7,3 +7,5 @@
                                                     
 
 Welcome to pizza quest where you're trying to become the golden pepperoni
+
+Type "help" anytime to display commands
