@@ -16,6 +16,8 @@ public class PizzaQuestApp {
         //text parser for users to use
         //path for some ascii art
         private static final String bannerFilePath = "data/WelcomeSplash.txt";
+        private static final String helpFilePath = "data/Instructions.txt";
+
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=1;
@@ -34,10 +36,11 @@ public class PizzaQuestApp {
 
 
         public void execute() {
-                //temporaily put in a 1 iteration loop to test user input
+                //temporarily put in a 1 iteration loop to test user input
                 while(turns < END_OF_TURNS) {
                         welcome();
-                        gameInstructions();
+//                        gameInstructions();
+                        System.out.println();
                         System.out.println(enterName());
                         parse(scanner.nextLine());
                         turns++;
@@ -53,9 +56,12 @@ public class PizzaQuestApp {
         }
 
         public void gameInstructions() {
-                System.out.println("You must use the following commands to navigate: " +
-                        "\"go [direction(North, West, South, East)]\" to move & " +
-                        "\"get [item]\" to retrieve an item");
+                try {
+                        String text = Files.readString(Path.of(helpFilePath));
+                        System.out.println(text);
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
 
         }
         private String enterName() {
@@ -72,7 +78,7 @@ public class PizzaQuestApp {
         private void parse(String userInput) {
                 //takes in user input and then splits it on the spaces. Logic comes later
                 List<String> parsedUserInput = new ArrayList<>(Arrays.asList(userInput.toLowerCase().split(" ")));
-                //after we break up the user iput send it to be process
+                //after we break up the user input send it to be process
                 processCommands(parsedUserInput);
         }
 
@@ -101,6 +107,9 @@ public class PizzaQuestApp {
                         case "inventory":
                                 //printInventory(); // prints your inventory
 
+                                break;
+                        case "help":
+                                gameInstructions();
                                 break;
                         default:
                                 System.out.println("I don't understand");
