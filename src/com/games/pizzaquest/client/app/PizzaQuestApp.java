@@ -2,7 +2,6 @@ package com.games.pizzaquest.client.app;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
-import com.games.pizzaquest.textparser.TextParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,7 +37,7 @@ public class PizzaQuestApp {
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
-        private String userInput;
+        private String currentInput;
 
 
         public void execute() {
@@ -86,6 +85,7 @@ public class PizzaQuestApp {
                 System.exit(0);
         }
         private void parse(String userInput) {
+                currentInput = userInput;
                 //takes in user input and then splits it on the spaces. Logic comes later
                 List<String> parsedUserInput = new ArrayList<>(Arrays.asList(userInput.toLowerCase().split(" ")));
                 //after we break up the user input send it to be process
@@ -156,7 +156,8 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                System.out.println("I don't understand");
+                                System.out.println(String.format("I don't understand '%s'", currentInput));
+                                gameInstructions();
                                 break;
                 }
         }
