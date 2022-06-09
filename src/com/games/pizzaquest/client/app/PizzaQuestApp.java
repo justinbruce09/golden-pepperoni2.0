@@ -20,7 +20,7 @@ public class PizzaQuestApp {
 
         //track turn may be moved to player
         private int turns = 0;
-        static final int END_OF_TURNS=1;
+        static final int END_OF_TURNS=10;
 
         public boolean isGameOver() {
                 return isGameOver;
@@ -42,6 +42,7 @@ public class PizzaQuestApp {
 
 
         public void execute() {
+                setGameOver(false);
                 //temporarily put in a 1 iteration loop to test user input
                 while(turns < END_OF_TURNS) {
                         welcome();
@@ -132,11 +133,18 @@ public class PizzaQuestApp {
                         case "help":
                                 gameInstructions();
                                 break;
+                        case "reset":
+                                resetGame();
+                                break;
                         default:
                                 System.out.println("I don't understand");
                                 break;
                 }
         }
 
-
+        private void resetGame() {
+                setGameOver(true);
+                turns = 0;
+                execute();
+        }
 }
