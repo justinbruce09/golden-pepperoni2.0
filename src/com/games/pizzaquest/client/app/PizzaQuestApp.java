@@ -45,7 +45,6 @@ public class PizzaQuestApp {
                 //temporarily put in a 1 iteration loop to test user input
                 while(turns < END_OF_TURNS) {
                         welcome();
-//                        gameInstructions();
                         System.out.println();
                         System.out.println(enterName());
                         parse(scanner.nextLine());
@@ -123,7 +122,7 @@ public class PizzaQuestApp {
                                 player.removeFromInventory(noun);
                                 break;
                         case "inventory":
-                                //prints inventory
+
                                 Set<Item> tempInventory = player.getInventory();
                                 System.out.println("Items in the Inventory");
                                 for (Item item : tempInventory) {
