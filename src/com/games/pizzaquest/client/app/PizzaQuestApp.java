@@ -1,13 +1,13 @@
 package com.games.pizzaquest.client.app;
+import com.games.pizzaquest.objects.Item;
+import com.games.pizzaquest.objects.Location;
+import com.games.pizzaquest.objects.Player;
 import com.games.pizzaquest.textparser.TextParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 public class PizzaQuestApp {
 
@@ -27,6 +27,12 @@ public class PizzaQuestApp {
         public void setGameOver(boolean gameOver) {
                 isGameOver = gameOver;
         }
+        private final List<String> itemList = List.of("Pizza Cutter", "Prosciutto", "Wine Glass", "Lemons", "Coin", "Ancient Pizza Cookbook", "Moped", "Cannoli", "Marble Sculpture", "Espresso");
+
+        //Initial State of the Player, inventory and starting location
+        private final Set<Item> inventory = new HashSet<>();
+        private final Location location =  new Location("Naples");
+        private final Player player = new Player(inventory, location);
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
@@ -78,29 +84,45 @@ public class PizzaQuestApp {
 
         //take the processed command and the delegates this to another
         private void processCommands(List<String> verbAndNounList){
-
-                switch (verbAndNounList.get(0)) {
+                String noun = verbAndNounList.get(1);
+                String verb = verbAndNounList.get(0);
+                switch (verb) {
                         case "quit":
                                 quitGame();
                                 break;
                         case "go":
                                 //go(verbAndNounList); // send to method to process next part of command
-
+                                //we will need a valid location list to validate
+//                                String loc = verbAndNounList.get(1);
+                                player.setLocation(noun);
                                 break;
                         case "look":
                                 //look(); //player location or item  description printed
-
+                                //will need a item list and a location list
+                                //todo - check size and get last
+                                //if room, do the first, else if item, do the second
+                                if(itemList.contains(noun)){
+                                        player.look(new Item(noun));
+                                }
+                                else{
+                                        player.look(player.getLocation());
+                                }
                                 break;
                         case "take":
-                                //addItem(); //take item from room if possible
-
+                                //add item to inventory
+                                player.addToInventory(noun);
                                 break;
                         case "give":
-                                //removeItem();
+                                //removes item from inventory
+                                player.removeFromInventory(noun);
                                 break;
                         case "inventory":
-                                //printInventory(); // prints your inventory
-
+                                //prints inventory
+                                Set<Item> tempInventory = player.getInventory();
+                                System.out.println("Items in the Inventory");
+                                for (Item item : tempInventory) {
+                                        System.out.println(item.getName());
+                                }
                                 break;
                         default:
                                 System.out.println("I don't understand");
