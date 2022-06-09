@@ -29,7 +29,7 @@ public class PizzaQuestApp {
         public void setGameOver(boolean gameOver) {
                 isGameOver = gameOver;
         }
-        private final List<String> itemList = List.of("Pizza Cutter", "Prosciutto", "Wine Glass", "Lemons", "Coin", "Ancient Pizza Cookbook", "Moped", "Cannoli", "Marble Sculpture", "Espresso");
+        private final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
@@ -42,14 +42,18 @@ public class PizzaQuestApp {
 
 
         public void execute() {
+
                 setGameOver(false);
                 //temporarily put in a 1 iteration loop to test user input
+
+                //temporarily put in a 4 iteration loop to test user input
+                welcome();
+                System.out.println(enterName());
+
                 while(turns < END_OF_TURNS) {
-                        welcome();
-                        System.out.println();
-                        System.out.println(enterName());
                         parse(scanner.nextLine());
                         turns++;
+                        System.out.println(turns);
                 }
         }
         private void welcome() {
@@ -90,13 +94,22 @@ public class PizzaQuestApp {
 
         //take the processed command and the delegates this to another
         private void processCommands(List<String> verbAndNounList){
-                String noun = verbAndNounList.get(1);
+                String noun = "";
+                if(verbAndNounList.size()>1){
+                       noun = verbAndNounList.get(verbAndNounList.size()-1);
+                }
                 String verb = verbAndNounList.get(0);
+
+
+
                 switch (verb) {
                         case "quit":
                                 quitGame();
                                 break;
                         case "go":
+                                if (noun.equals("")){
+                                        break;
+                                }
                                 //go(verbAndNounList); // send to method to process next part of command
                                 //we will need a valid location list to validate
 //                                String loc = verbAndNounList.get(1);
@@ -107,6 +120,9 @@ public class PizzaQuestApp {
                                 //will need a item list and a location list
                                 //todo - check size and get last
                                 //if room, do the first, else if item, do the second
+                                if (noun.equals("")){
+                                        break;
+                                }
                                 if(itemList.contains(noun)){
                                         player.look(new Item(noun));
                                 }
@@ -120,6 +136,9 @@ public class PizzaQuestApp {
                                 break;
                         case "give":
                                 //removes item from inventory
+                                if (noun.equals("")){
+                                        break;
+                                 }
                                 player.removeFromInventory(noun);
                                 break;
                         case "inventory":
