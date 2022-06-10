@@ -1,7 +1,7 @@
 package com.games.pizzaquest.client;
-import com.games.pizzaquest.client.app.PizzaQuestApp;
+import com.games.pizzaquest.app.PizzaQuestApp;
 
-public class main {
+public class PizzaClient {
     public static void main(String[] args) {
             PizzaQuestApp app = new PizzaQuestApp();
             app.execute();

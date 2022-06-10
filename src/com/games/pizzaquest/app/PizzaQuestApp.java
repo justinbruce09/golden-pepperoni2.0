@@ -1,9 +1,10 @@
-package com.games.pizzaquest.client.app;
+package com.games.pizzaquest.app;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -14,8 +15,8 @@ public class PizzaQuestApp {
         static Scanner scanner = new Scanner(System.in);
         //text parser for users to use
         //path for some ascii art
-        private static final String bannerFilePath = "data/WelcomeSplash.txt";
-        private static final String helpFilePath = "data/Instructions.txt";
+        private static final String bannerFilePath = "resources/WelcomeSplash.txt";
+        private static final String helpFilePath = "./Instructions.txt";
 
         //track turn may be moved to player
         private int turns = 0;
@@ -52,7 +53,6 @@ public class PizzaQuestApp {
                 while(turns < END_OF_TURNS) {
                         parse(scanner.nextLine());
                         turns++;
-                        System.out.println(turns);
                 }
         }
         private void welcome() {
@@ -124,10 +124,10 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        player.look(new Item(noun));
+                                        System.out.println(player.look(new Item(noun)));
                                 }
                                 else{
-                                        player.look(player.getLocation());
+                                        System.out.println(player.look(player.getLocation()));
                                 }
                                 break;
                         case "take":
