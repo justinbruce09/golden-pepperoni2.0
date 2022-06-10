@@ -123,10 +123,10 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        player.look(new Item(noun));
+                                        System.out.println(player.look(new Item(noun)));
                                 }
                                 else{
-                                        player.look(player.getLocation());
+                                        System.out.println(player.look(player.getLocation()));
                                 }
                                 break;
                         case "take":
