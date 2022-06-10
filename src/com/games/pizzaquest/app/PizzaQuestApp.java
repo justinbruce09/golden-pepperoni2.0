@@ -16,7 +16,7 @@ public class PizzaQuestApp {
         //text parser for users to use
         //path for some ascii art
         private static final String bannerFilePath = "resources/WelcomeSplash.txt";
-        private static final String helpFilePath = "./Instructions.txt";
+        private static final String helpFilePath = "resources/Instructions.txt";
 
         //track turn may be moved to player
         private int turns = 0;
@@ -33,7 +33,8 @@ public class PizzaQuestApp {
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        private final Location location =  new Location("Naples");
+        String[] rooms = {"rome", "paris" ,"nyc", "la"};
+        private final Location location =  new Location("Naples", rooms);
         private final Player player = new Player(inventory, location);
 
         //keep the game running until win/lose condition is met
@@ -76,7 +77,7 @@ public class PizzaQuestApp {
         private String enterName() {
                 System.out.println("Please enter your name: ");
                 String playerName = scanner.nextLine();
-                return ("Ciao " + playerName);
+                return ("Ciao " + playerName+ " you are in " + player.getLocation());
         }
 
         private void quitGame() {
