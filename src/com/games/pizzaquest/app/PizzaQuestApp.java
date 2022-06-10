@@ -57,10 +57,8 @@ public class PizzaQuestApp {
         }
         private void welcome() {
                 try {
-                        InputStream input = getClass().getResourceAsStream(bannerFilePath);
-
                         String text = Files.readString(Path.of(bannerFilePath));
-                        System.out.println(input);
+                        System.out.println(text);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
