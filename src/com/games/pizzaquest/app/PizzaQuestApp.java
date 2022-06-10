@@ -1,4 +1,4 @@
-package com.games.pizzaquest.client.app;
+package com.games.pizzaquest.app;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
@@ -52,7 +52,6 @@ public class PizzaQuestApp {
                 while(turns < END_OF_TURNS) {
                         parse(scanner.nextLine());
                         turns++;
-                        System.out.println(turns);
                 }
         }
         private void welcome() {

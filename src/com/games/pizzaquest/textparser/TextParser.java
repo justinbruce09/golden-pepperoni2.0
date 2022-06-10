@@ -2,7 +2,6 @@ package com.games.pizzaquest.textparser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import com.games.pizzaquest.client.app.PizzaQuestApp;
 
 public class TextParser {
 
