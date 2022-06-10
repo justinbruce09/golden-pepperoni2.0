@@ -4,6 +4,7 @@ import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -14,8 +15,8 @@ public class PizzaQuestApp {
         static Scanner scanner = new Scanner(System.in);
         //text parser for users to use
         //path for some ascii art
-        private static final String bannerFilePath = "data/WelcomeSplash.txt";
-        private static final String helpFilePath = "data/Instructions.txt";
+        private static final String bannerFilePath = "resources/WelcomeSplash.txt";
+        private static final String helpFilePath = "./Instructions.txt";
 
         //track turn may be moved to player
         private int turns = 0;
@@ -56,8 +57,10 @@ public class PizzaQuestApp {
         }
         private void welcome() {
                 try {
+                        InputStream input = getClass().getResourceAsStream(bannerFilePath);
+
                         String text = Files.readString(Path.of(bannerFilePath));
-                        System.out.println(text);
+                        System.out.println(input);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
