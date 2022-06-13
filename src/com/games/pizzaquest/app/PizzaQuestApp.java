@@ -1,10 +1,10 @@
 package com.games.pizzaquest.app;
+import com.games.pizzaquest.objects.Gamestate;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -30,17 +30,28 @@ public class PizzaQuestApp {
                 isGameOver = gameOver;
         }
         private final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
+        private final Hashtable<String, Location> map = new Hashtable<>();
+
+        //Initial State of the game
+
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        String[] rooms = {"rome", "paris" ,"nyc", "la"};
-        private final Location location =  new Location("Naples", rooms);
-        private final Player player = new Player(inventory, location);
+        private final Location location =  new Location("Naples", "", "", "Rome", "");
+
+        private final Gamestate gamestate = new Gamestate(location);
+        private final Player player = new Player(inventory);
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
         private String currentInput;
 
+        public void initMap(Hashtable<String, Location> map){
+                Location naples = new Location("Naples", "", "", "Rome", "");
+                Location rome = new Location("Rome", "Naples", "Tower of Pizza", "Canals", "Pompeii");
+                map.put("naples", naples);
+                map.put("rome", rome);
+        }
 
         public void execute() {
 
@@ -49,6 +60,7 @@ public class PizzaQuestApp {
 
                 //temporarily put in a 4 iteration loop to test user input
                 welcome();
+                initMap(map);
                 System.out.println(enterName());
 
                 while(turns < END_OF_TURNS) {
@@ -77,7 +89,7 @@ public class PizzaQuestApp {
         private String enterName() {
                 System.out.println("Please enter your name: ");
                 String playerName = scanner.nextLine();
-                return ("Ciao " + playerName+ " you are in " + player.getLocation());
+                return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
         private void quitGame() {
@@ -111,10 +123,18 @@ public class PizzaQuestApp {
                                 if (noun.equals("")){
                                         break;
                                 }
+                                String nextLocation = gamestate.getPlayerLocation().getAdjLocations().get(noun);
+                                if(!nextLocation.equals("")){
+                                        gamestate.setPlayerLocation(map.get(nextLocation.toLowerCase()));
+                                        System.out.println(player.look(gamestate.getPlayerLocation()));
+                                }
+                                else{
+                                        System.out.println("There is nothing that way!");
+                                }
+
                                 //go(verbAndNounList); // send to method to process next part of command
                                 //we will need a valid location list to validate
 //                                String loc = verbAndNounList.get(1);
-                                player.setLocation(noun);
                                 break;
                         case "look":
                                 //look(); //player location or item  description printed
@@ -128,7 +148,7 @@ public class PizzaQuestApp {
                                         System.out.println(player.look(new Item(noun)));
                                 }
                                 else{
-                                        System.out.println(player.look(player.getLocation()));
+                                        System.out.println(player.look(gamestate.getPlayerLocation()));
                                 }
                                 break;
                         case "take":
