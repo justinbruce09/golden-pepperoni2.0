@@ -1,7 +1,6 @@
 package com.games.pizzaquest.textparser;
 
 import com.games.pizzaquest.app.PizzaQuestApp;
-import com.games.pizzaquest.objects.Gamestate;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 
