@@ -3,6 +3,7 @@ import com.games.pizzaquest.objects.Gamestate;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.Player;
+import com.games.pizzaquest.textparser.TextParser;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,6 +43,7 @@ public class PizzaQuestApp {
         private final Gamestate gamestate = new Gamestate(location);
         private final Player player = new Player(inventory);
 
+
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
         private String currentInput;
@@ -54,7 +56,7 @@ public class PizzaQuestApp {
         }
 
         public void execute() {
-
+                TextParser parser = new TextParser();
                 setGameOver(false);
                 //temporarily put in a 1 iteration loop to test user input
 
@@ -64,7 +66,8 @@ public class PizzaQuestApp {
                 System.out.println(enterName());
 
                 while(turns < END_OF_TURNS) {
-                        parse(scanner.nextLine());
+
+                        parser.parse(scanner.nextLine());
                         turns++;
                 }
         }
@@ -92,11 +95,12 @@ public class PizzaQuestApp {
                 return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
-        private void quitGame() {
+        public void quitGame() {
                 System.out.println("You'll always have a pizza our heart ... Goodbye!");
                 setGameOver(true);
                 System.exit(0);
         }
+
         private void parse(String userInput) {
                 currentInput = userInput;
                 //takes in user input and then splits it on the spaces. Logic comes later
@@ -183,7 +187,8 @@ public class PizzaQuestApp {
                 }
         }
 
-        private void resetGame() {
+
+        public void resetGame() {
                 setGameOver(true);
                 turns = 0;
                 execute();
