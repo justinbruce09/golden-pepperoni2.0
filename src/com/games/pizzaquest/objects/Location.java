@@ -4,55 +4,42 @@ import java.io.DataInput;
 import java.util.*;
 
 public class Location {
-    private String name;
-    private List<Location> adjacentLocations;
-
-    Hashtable<Integer, String> boarderRooms = new Hashtable<Integer,String >();
+    private final String name;
+    private final Hashtable<String, String> adjLocations = new Hashtable<>();
 
 
 
-    public Location (String name, String[] adjRooms){
+    public Location (String name, String... locations){
         this.name = name;
-        boarderRooms.put(0, ""); //north
-        boarderRooms.put(1, ""); //east
-        boarderRooms.put(2, ""); //south
-        boarderRooms.put(3, ""); //west
-        setBoarderRooms(adjRooms);
+        setBoarderRooms(locations);
     }
 
-    private void setBoarderRooms(String[] boarders){
-        for (int i = 0 ; i <boarders.length ; i++){
-            boarderRooms.put(i,boarders[i]);
+    private void setBoarderRooms(String... locations){
+        String[] directions = {"north", "east", "south", "west"};
+        for (int i = 0 ; i <locations.length ; i++){
+            adjLocations.put(directions[i],"");
+            if(!locations[i].equals("")){
+                adjLocations.put(directions[i], locations[i]);
+            }
         }
     }
 
-   /* public void setAdjacentLocations(String... locations) {
-        adjacentLocations = new ArrayList<>();
-        for (String location : locations) {
-            this.adjacentLocations.add(new Location(location));
-        }
-    }*/
+    public Hashtable<String, String> getAdjLocations() {
+        return adjLocations;
+    }
 
- private String printBoarders(){
-     return "\nto the north we have " + boarderRooms.get(0)+ "\n to the east we have " + boarderRooms.get(1)+
-             "\nto the south we have " + boarderRooms.get(2)+"\n to the west we have " + boarderRooms.get(3)+".";
-   /*  System.out.println("to the east we have" + boarderRooms.get(1));
-     System.out.println("to the south we have" + boarderRooms.get(2));
-     System.out.println("to the west we have" + boarderRooms.get(3));*/
- }
-
-
+    private String printBoarders(){
+     return "\nto the north we have " + adjLocations.get("north") + "\n to the east we have " + adjLocations.get("east")+
+             "\nto the south we have " + adjLocations.get("south") + "\n to the west we have " + adjLocations.get("west")+".";
+    }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
     @Override
     public String toString(){
-        return "You are in the " + getName() + "." +printBoarders();
+        return "You are in the " + getName() + "." + printBoarders();
     }
 
 
