@@ -1,8 +1,5 @@
 package com.games.pizzaquest.app;
-import com.games.pizzaquest.objects.Gamestate;
-import com.games.pizzaquest.objects.Item;
-import com.games.pizzaquest.objects.Location;
-import com.games.pizzaquest.objects.Player;
+import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
 
 import java.io.IOException;
@@ -39,6 +36,7 @@ public class PizzaQuestApp {
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
         private final Location location =  new Location("Naples", "", "", "Rome", "");
+        private NonPlayerCharacter npc1 = new NonPlayerCharacter("tony", "tony's quest");
 
         public final Gamestate gamestate = new Gamestate(location);
         public final Player player = new Player(inventory);
@@ -49,7 +47,7 @@ public class PizzaQuestApp {
 
         public void initMap(Hashtable<String, Location> map){
                 Location naples = new Location("Naples", "", "", "Rome", "");
-                Location rome = new Location("Rome", "Naples", "Tower", "Canal", "Pompeii");
+                Location rome = new Location("Rome", npc1,"Naples", "Tower", "Canal", "Pompeii");
                 Location pompeii = new Location("Pompeii", "", "Rome","Trevi", "");
                 Location trevi = new Location("Trevi", "Pompeii", "Canal","Cathedral", "");
                 Location canal = new Location("Canal", "Rome", "Almafi","Cathedral", "Trevi");
@@ -75,7 +73,6 @@ public class PizzaQuestApp {
                 welcome();
                 initMap(map);
                 System.out.println(enterName());
-
                 while(turns < END_OF_TURNS) {
                         parser.parse(scanner.nextLine(), map);
                         turns++;
