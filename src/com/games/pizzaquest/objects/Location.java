@@ -5,7 +5,7 @@ import java.util.*;
 public class Location {
     private final String name;
     private final Hashtable<String, String> adjLocations = new Hashtable<>();
-
+    NonPlayerCharacter npc = null;
 
 
     public Location (String name, String... locations){
@@ -13,6 +13,11 @@ public class Location {
         setBoarderRooms(locations);
     }
 
+    public Location (String name, NonPlayerCharacter NPC,String... locations){
+        this.name = name;
+        setBoarderRooms(locations);
+        this.npc = NPC;
+    }
     private void setBoarderRooms(String... locations){
         String[] directions = {"north", "east", "south", "west"};
         for (int i = 0 ; i <locations.length ; i++){
