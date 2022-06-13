@@ -1,12 +1,11 @@
 package com.games.pizzaquest.textparser;
 
 import com.games.pizzaquest.app.PizzaQuestApp;
+import com.games.pizzaquest.objects.Gamestate;
 import com.games.pizzaquest.objects.Item;
+import com.games.pizzaquest.objects.Location;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TextParser extends PizzaQuestApp {
     /*
@@ -14,23 +13,21 @@ public class TextParser extends PizzaQuestApp {
     what the user types.
          */
     String currentInput="";
-    public void parse(String userInput) {
+    public void parse(String userInput, Hashtable<String, Location> map) {
         currentInput = userInput;
         //takes in user input and then splits it on the spaces. Logic comes later
         List<String> parsedUserInput = new ArrayList<>(Arrays.asList(userInput.toLowerCase().split(" ")));
         //after we break up the user input send it to be process
-        processCommands(parsedUserInput);
+        processCommands(parsedUserInput, map);
     }
 
     //take the processed command and the delegates this to another
-    private void processCommands(List<String> verbAndNounList){
+    private void processCommands(List<String> verbAndNounList, Hashtable<String, Location> map){
         String noun = "";
         if(verbAndNounList.size()>1){
             noun = verbAndNounList.get(verbAndNounList.size()-1);
         }
         String verb = verbAndNounList.get(0);
-
-
 
         switch (verb) {
             case "quit":
@@ -40,10 +37,17 @@ public class TextParser extends PizzaQuestApp {
                 if (noun.equals("")){
                     break;
                 }
-                //go(verbAndNounList); // send to method to process next part of command
-                //we will need a valid location list to validate
-//                                String loc = verbAndNounList.get(1);
-                player.setLocation(noun);
+                String nextLocation = gamestate.getPlayerLocation().getAdjLocations().get(noun);
+                if(!nextLocation.equals("")){
+                    gamestate.setPlayerLocation(map.get(nextLocation.toLowerCase()));
+                    System.out.println();
+                    System.out.println(player.look(gamestate.getPlayerLocation()));
+                    System.out.println("hello");
+                    System.out.println();
+                }
+                else{
+                    System.out.println("There is nothing that way!");
+                }
                 break;
             case "look":
                 //look(); //player location or item  description printed
@@ -57,7 +61,7 @@ public class TextParser extends PizzaQuestApp {
                     System.out.println(player.look(new Item(noun)));
                 }
                 else{
-                    System.out.println(player.look(player.getLocation()));
+                    System.out.println(player.look(gamestate.getPlayerLocation()));
                 }
                 break;
             case "take":

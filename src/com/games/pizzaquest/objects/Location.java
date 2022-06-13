@@ -1,6 +1,5 @@
 package com.games.pizzaquest.objects;
 
-import java.io.DataInput;
 import java.util.*;
 
 public class Location {

@@ -1,14 +1,14 @@
 package com.games.pizzaquest.objects;
 
 public class Gamestate {
-    Location playerLocation;
+    private Location playerLocation;
 
     public Gamestate(Location playerLocation){
         this.playerLocation = playerLocation;
     }
 
     public Location getPlayerLocation() {
-        return playerLocation;
+        return this.playerLocation;
     }
 
     public void setPlayerLocation(Location playerLocation){
