@@ -16,7 +16,7 @@ public class PizzaQuestApp {
         //text parser for users to use
         //path for some ascii art
         private static final String bannerFilePath = "resources/WelcomeSplash.txt";
-        private static final String helpFilePath = "./Instructions.txt";
+        private static final String helpFilePath = "resources/Instructions.txt";
 
         //track turn may be moved to player
         private int turns = 0;
