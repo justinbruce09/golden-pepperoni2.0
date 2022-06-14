@@ -205,7 +205,7 @@ public class PizzaQuestApp {
 
         private void talk(String noun) {
                 Location playerLocation = gamestate.getPlayerLocation();
-                if(playerLocation.npc.getName().equals(noun)){
+                if(playerLocation.npc != null && playerLocation.npc.getName().equals(noun)){
                         System.out.println(playerLocation.npcTalk());
                 }else{
                         System.out.println("That player many not be in in this room or even exist!");
