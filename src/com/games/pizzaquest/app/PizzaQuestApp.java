@@ -5,6 +5,7 @@ import com.games.pizzaquest.textparser.TextParser;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
 import java.util.*;
 
 public class PizzaQuestApp {
@@ -183,7 +184,7 @@ public class PizzaQuestApp {
                                 break;
                         default:
                                 System.out.printf("I don't understand '%s'%n", verbAndNounList);
-                                gameInstructions();
+                                System.out.println("Type help if you need some guidance on command structure!");;
                                 break;
                 }
         }
