@@ -6,6 +6,16 @@ public class NonPlayerCharacter implements PlayerInterface{
  private String name="";
  Boolean isQuestActive= false;
 
+ public String getNpcDescription() {
+  return npcDescription;
+ }
+
+ public void setNpcDescription(String npcDescription) {
+  this.npcDescription = npcDescription;
+ }
+
+ private String npcDescription= "";
+
  private HashMap<String, String> dialogue = new HashMap<String,String>();
 
  public NonPlayerCharacter(String name, String dialog){
@@ -18,6 +28,10 @@ public class NonPlayerCharacter implements PlayerInterface{
  public void setDialogue(String quest){
   dialogue.put("quest", quest);
 
+ }
+
+ public String giveQuest(){
+  return dialogue.get("quest");
  }
 
  @Override
