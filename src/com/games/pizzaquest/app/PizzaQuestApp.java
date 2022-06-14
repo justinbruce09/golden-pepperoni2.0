@@ -160,7 +160,7 @@ public class PizzaQuestApp {
                                 }
                                 if(itemList.contains(noun)){
                                         System.out.println(player.look(new Item(noun)));
-                                }else if (gamestate.getPlayerLocation().npc.getName().equals(noun)){
+                                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
                                         System.out.println(gamestate.getPlayerLocation().npc.getNpcDescription());
                         }
                                 else{
