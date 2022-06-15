@@ -5,7 +5,7 @@ import java.util.*;
 public class Location {
     private final String name;
     private final Hashtable<String, String> adjLocations = new Hashtable<>();
-    NonPlayerCharacter npc = null;
+    public NonPlayerCharacter npc = null;
 
 
     public Location (String name, String... locations){
@@ -24,6 +24,8 @@ public class Location {
             adjLocations.put(directions[i],"");
             if(!locations[i].equals("")){
                 adjLocations.put(directions[i], locations[i]);
+            }else{
+                adjLocations.put(directions[i], "a stone wall");
             }
         }
     }
@@ -33,17 +35,28 @@ public class Location {
     }
 
     private String printBoarders(){
-     return "\nto the north we have " + adjLocations.get("north") + "\n to the east we have " + adjLocations.get("east")+
-             "\nto the south we have " + adjLocations.get("south") + "\n to the west we have " + adjLocations.get("west")+".";
+     return "\nTo the north we have " + adjLocations.get("north") + ",\nTo the east we have " + adjLocations.get("east")+
+            ",\nTo the south we have " + adjLocations.get("south") + ",\nTo the west we have " + adjLocations.get("west")+".";
     }
 
     public String getName() {
         return name;
     }
 
+    public String npcInRoom(NonPlayerCharacter npc){
+        String npcStatus="There is no one in this room";
+        if(npc!=null){
+            npcStatus="Standing in " + name+ " is "+ npc.getName();
+        }
+        return npcStatus;
+    }
+    public String npcTalk(){
+        return npc.giveQuest();
+    }
+
     @Override
     public String toString(){
-        return "You are in the " + getName() + "." + printBoarders();
+        return "You are in the " + getName() + "." + printBoarders() +"\n"+ npcInRoom(npc);
     }
 
 
