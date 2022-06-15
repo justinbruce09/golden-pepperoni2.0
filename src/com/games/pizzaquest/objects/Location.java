@@ -6,7 +6,26 @@ public class Location {
     private final String name;
     private final Hashtable<String, String> adjLocations = new Hashtable<>();
     public NonPlayerCharacter npc = null;
+    private String north;
+    private String east;
+    private String south;
+    private String west;
 
+    public String getNorth() {
+        return north;
+    }
+
+    public String getEast() {
+        return east;
+    }
+
+    public String getSouth() {
+        return south;
+    }
+
+    public String getWest() {
+        return west;
+    }
 
     public Location (String name, String... locations){
         this.name = name;
@@ -18,6 +37,7 @@ public class Location {
         setBoarderRooms(locations);
         this.npc = NPC;
     }
+
     private void setBoarderRooms(String... locations){
         String[] directions = {"north", "east", "south", "west"};
         for (int i = 0 ; i <locations.length ; i++){
@@ -28,6 +48,27 @@ public class Location {
                 adjLocations.put(directions[i], "a stone wall");
             }
         }
+    }
+
+    public String getNextLocation(String direction){
+        String nextLoc = null;
+        switch (direction.toLowerCase()){
+            case "north":
+                nextLoc = getNorth();
+                break;
+            case "east":
+                nextLoc = getEast();
+                break;
+            case "south":
+                nextLoc = getSouth();
+                break;
+            case "west":
+                nextLoc = getWest();
+                break;
+            default:
+                break;
+        }
+        return nextLoc;
     }
 
     public Hashtable<String, String> getAdjLocations() {

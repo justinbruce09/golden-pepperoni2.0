@@ -1,9 +1,12 @@
 package com.games.pizzaquest.app;
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLOutput;
@@ -71,6 +74,29 @@ public class PizzaQuestApp {
                 map.put("tower", towerOfPizza);
         }
 
+        Gson gson = new Gson();
+        String jsonData = "[{'name': 'Naples', 'south': 'Rome'}, " +
+                "{'name': 'Rome', 'east':'Tower', 'west': 'Pompeii', 'north': 'Naples', 'south':'Canals'}," +
+                "{'name': 'Pompeii', 'south': 'Trevi', 'east': 'Rome'}," +
+                "{'name': 'Trevi', 'south': 'Cathedral', 'east': 'Canals', 'north':'Pompeii'}," +
+                "{'name': 'Cathedral', 'north': 'Trevi', 'east': 'Canals'}," +
+                "{'name': 'Canals', 'east': 'Almafi', 'north': 'Rome', 'west':'Trevi', 'south':'Cathedral'}," +
+                "{'name': 'Almafi', 'west': 'Canals', 'north': 'Tower'}," +
+                "{'name': 'Tower', 'west':'Rome', 'south': 'Almafi'}]";
+
+        ArrayList<Location> locationList;
+        Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
+
+
+        public Location getLocationFromList(List<Location> locationList, String locationName){
+                for (Location location : locationList) {
+                        if(location.getName().equals(locationName)){
+                                return location;
+                        }
+                }
+                return null;
+        }
+
         public void execute() {
                 TextParser parser = new TextParser();
                 setGameOver(false);
@@ -81,6 +107,16 @@ public class PizzaQuestApp {
                 //temporarily put in a 4 iteration loop to test user input
                 welcome();
                 initMap(map);
+
+                locationList = gson.fromJson(jsonData, locationListType);
+                for (Location loc : locationList) {
+                        System.out.println("Current Loc: " + loc.getName());
+                        System.out.println("North: " + loc.getNextLocation("North"));
+                        System.out.println("East: " + loc.getNextLocation("East"));
+                        System.out.println("South: " + loc.getNextLocation("South"));
+                        System.out.println("West: " + loc.getNextLocation("West"));
+                        System.out.println();
+                }
                 System.out.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
@@ -140,6 +176,8 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 String nextLocation = gamestate.getPlayerLocation().getAdjLocations().get(noun);
+                                String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
+                                System.out.println("The next location will be: " + nextLoc);
                                 if(!nextLocation.equals("")){
                                         gamestate.setPlayerLocation(map.get(nextLocation.toLowerCase()));
                                         System.out.println();
@@ -183,7 +221,6 @@ public class PizzaQuestApp {
                                 player.removeFromInventory(noun);
                                 break;
                         case "inventory":
-
                                 Set<Item> tempInventory = player.getInventory();
                                 System.out.println("Items in the Inventory");
                                 for (Item item : tempInventory) {
