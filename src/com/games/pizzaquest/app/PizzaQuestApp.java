@@ -1,15 +1,14 @@
 package com.games.pizzaquest.app;
+
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class PizzaQuestApp {
@@ -82,9 +81,10 @@ public class PizzaQuestApp {
         public void execute() {
                 TextParser parser = new TextParser();
                 setGameOver(false);
-                //temporary setting of decription for npc
+                //temporary setting of description for npc
                 //temporarily put in a 1 iteration loop to test user input
                 NpcGson();
+                GameTextGson();
                 npcList.get(2).setNpcDescription("Tony is covered in flour and looks like he wants to speak to you!");
 
 
@@ -248,7 +248,27 @@ public class PizzaQuestApp {
                 }
 
 
+        }
 
+        public void GameTextGson() {
+                try {
+                        // create Gson instance
+                        Gson gson = new Gson();
+
+                        // create a reader
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/instructions.json"));
+
+                        // convert JSON file to map
+                        GameTexts texts = gson.fromJson(reader, GameTexts.class);
+                        for (GameText text: texts.getTexts()) {
+                                System.out.println(text.getDescription());
+                        }
+
+                        reader.close();
+
+                } catch (Exception ex) {
+                        ex.printStackTrace();
+                }
         }
 
 }
