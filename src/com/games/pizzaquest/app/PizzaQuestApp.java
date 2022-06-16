@@ -1,4 +1,5 @@
 package com.games.pizzaquest.app;
+
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
@@ -6,7 +7,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,6 +34,9 @@ public class PizzaQuestApp {
 
         private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
 
+        GameTexts gameTexts = new GameTexts();
+
+
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
@@ -46,10 +49,17 @@ public class PizzaQuestApp {
         public void execute() {
                 TextParser parser = new TextParser();
                 setGameOver(false);
+                //temporary setting of description for npc
+                //temporarily put in a 1 iteration loop to test user input
                 NpcGson();
                 locationList = getLocationListFromJson();
                 gameMap = hashNewMap(locationList);
                 setNPC();
+                GameTextGson();
+                npcList.get(2).setNpcDescription("Tony is covered in flour and looks like he wants to speak to you!");
+
+
+                //temporarily put in a 4 iteration loop to test user input
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
                 System.out.println(enterName());
@@ -58,7 +68,7 @@ public class PizzaQuestApp {
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
 
                         processCommands(parser.parse(scanner.nextLine()));
-                 
+
 
                 }
         }
@@ -72,12 +82,7 @@ public class PizzaQuestApp {
         }
 
         private void gameInstructions() {
-                try {
-                        String text = Files.readString(Path.of(helpFilePath));
-                        System.out.println(text);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+                        gameTexts.displayCommands();
 
         }
 
@@ -235,6 +240,25 @@ public class PizzaQuestApp {
                 return locationList;
         }
 
+
+
+        public void GameTextGson() {
+                try {
+                        // create Gson instance
+                        Gson gson = new Gson();
+
+                        // create a reader
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/instructions.json"));
+
+                        // convert JSON file to GameTexts Object which contains the GameText
+                        gameTexts = gson.fromJson(reader, GameTexts.class);
+
+                        reader.close();
+
+                } catch (Exception ex) {
+                        ex.printStackTrace();
+                }
+        }
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
                 for(Location location: initialMap){
