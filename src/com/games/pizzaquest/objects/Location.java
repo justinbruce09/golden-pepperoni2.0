@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Location {
     private final String name;
-    private final Hashtable<String, String> adjLocations = new Hashtable<>();
     public NonPlayerCharacter npc = null;
     private String north;
     private String east;
@@ -27,27 +26,21 @@ public class Location {
         return west;
     }
 
-    public Location (String name, String... locations){
+    public Location (String name, String north, String south, String east, String west ){
         this.name = name;
-        setBoarderRooms(locations);
+        this.north = north;
+        this.south = south;
+        this.east = east;
+        this.west = west;
     }
 
-    public Location (String name, NonPlayerCharacter NPC,String... locations){
+    public Location (String name, NonPlayerCharacter NPC,String north, String south, String east, String west ){
         this.name = name;
-        setBoarderRooms(locations);
+        this.north = north;
+        this.south = south;
+        this.east = east;
+        this.west = west;
         this.npc = NPC;
-    }
-
-    private void setBoarderRooms(String... locations){
-        String[] directions = {"north", "east", "south", "west"};
-        for (int i = 0 ; i <locations.length ; i++){
-            adjLocations.put(directions[i],"");
-            if(!locations[i].equals("")){
-                adjLocations.put(directions[i], locations[i]);
-            }else{
-                adjLocations.put(directions[i], "a stone wall");
-            }
-        }
     }
 
     public String getNextLocation(String direction){
@@ -71,13 +64,9 @@ public class Location {
         return nextLoc;
     }
 
-    public Hashtable<String, String> getAdjLocations() {
-        return adjLocations;
-    }
-
     private String printBoarders(){
-     return "\nTo the north we have " + adjLocations.get("north") + ",\nTo the east we have " + adjLocations.get("east")+
-            ",\nTo the south we have " + adjLocations.get("south") + ",\nTo the west we have " + adjLocations.get("west")+".";
+        return "\nTo the north we have " + getNorth() + ",\nTo the east we have " + getEast()+
+                ",\nTo the south we have " + getSouth() + ",\nTo the west we have " + getWest()+".";
     }
 
     public String getName() {

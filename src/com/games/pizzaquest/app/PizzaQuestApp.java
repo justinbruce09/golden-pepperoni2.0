@@ -4,12 +4,10 @@ import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLOutput;
 import java.util.*;
 
 public class PizzaQuestApp {
@@ -40,11 +38,11 @@ public class PizzaQuestApp {
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        private final Location location =  new Location("Naples", "", "", "Rome", "");
         private final NonPlayerCharacter npc1 = new NonPlayerCharacter("tony", "Come guess me this riddle, what beats pipe and fiddle\n" +
                 "What's hotter than mustard and milder than cream\n" +
                 "What best wets your whistle, what's clearer than crystal\n" +
                 "Sweeter than honey and stronger than steam");
+        private final Location location =  new Location("Naples", npc1, "stonewall", "Rome", "stonewall", "stonewall");
 
         private final NonPlayerCharacter npc2 = new NonPlayerCharacter("momma_mozzarella", "I want a coin");
 
@@ -55,47 +53,29 @@ public class PizzaQuestApp {
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
 
-        private void initMap(Hashtable<String, Location> map){
-                Location naples = new Location("Naples", "", "", "Rome", "");
-                Location rome = new Location("Rome", npc1,"Naples", "Tower", "Canal", "Pompeii");
-                Location pompeii = new Location("Pompeii", "", "Rome","Trevi", "");
-                Location trevi = new Location("Trevi", npc2,"Pompeii", "Canal","Cathedral", "");
-                Location canal = new Location("Canal", "Rome", "Almafi","Cathedral", "Trevi");
-                Location cathedral = new Location("Cathedral", "Trevi", "Canal","", "");
-                Location almafi = new Location("Almafi", "Tower", "","", "Canal");
-                Location towerOfPizza = new Location("Tower", "", "","Almafi", "Rome");
-                map.put("naples", naples);
-                map.put("rome", rome);
-                map.put("pompeii", pompeii);
-                map.put("trevi", trevi);
-                map.put("canal", canal);
-                map.put("cathedral", cathedral);
-                map.put("almafi", almafi);
-                map.put("tower", towerOfPizza);
-        }
-
         Gson gson = new Gson();
-        String jsonData = "[{'name': 'Naples', 'south': 'Rome'}, " +
-                "{'name': 'Rome', 'east':'Tower', 'west': 'Pompeii', 'north': 'Naples', 'south':'Canals'}," +
-                "{'name': 'Pompeii', 'south': 'Trevi', 'east': 'Rome'}," +
-                "{'name': 'Trevi', 'south': 'Cathedral', 'east': 'Canals', 'north':'Pompeii'}," +
-                "{'name': 'Cathedral', 'north': 'Trevi', 'east': 'Canals'}," +
-                "{'name': 'Canals', 'east': 'Almafi', 'north': 'Rome', 'west':'Trevi', 'south':'Cathedral'}," +
-                "{'name': 'Almafi', 'west': 'Canals', 'north': 'Tower'}," +
-                "{'name': 'Tower', 'west':'Rome', 'south': 'Almafi'}]";
+        Hashtable<String, Location> mapped;
+        String jsonData = "[{'name': 'naples', 'south': 'rome'}, " +
+                "{'name': 'rome', 'east':'tower', 'west': 'pompeii', 'north': 'naples', 'south':'canals'}," +
+                "{'name': 'pompeii', 'south': 'trevi', 'east': 'rome'}," +
+                "{'name': 'trevi', 'south': 'cathedral', 'east': 'canals', 'north':'pompeii'}," +
+                "{'name': 'cathedral', 'north': 'trevi', 'east': 'canals'}," +
+                "{'name': 'canals', 'east': 'almafi', 'north': 'rome', 'west':'trevi', 'south':'cathedral'}," +
+                "{'name': 'almafi', 'west': 'canals', 'north': 'tower'}," +
+                "{'name': 'tower', 'west':'rome', 'south': 'almafi'}]";
 
         ArrayList<Location> locationList;
         Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
 
-
-        public Location getLocationFromList(List<Location> locationList, String locationName){
-                for (Location location : locationList) {
-                        if(location.getName().equals(locationName)){
-                                return location;
-                        }
+        public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
+                Hashtable<String, Location> newMap = new Hashtable<>();
+                for(Location location: initialMap){
+                        newMap.put(location.getName(), location);
                 }
-                return null;
+                return newMap;
         }
+
+
 
         public void execute() {
                 TextParser parser = new TextParser();
@@ -106,22 +86,15 @@ public class PizzaQuestApp {
 
                 //temporarily put in a 4 iteration loop to test user input
                 welcome();
-                initMap(map);
 
                 locationList = gson.fromJson(jsonData, locationListType);
-                for (Location loc : locationList) {
-                        System.out.println("Current Loc: " + loc.getName());
-                        System.out.println("North: " + loc.getNextLocation("North"));
-                        System.out.println("East: " + loc.getNextLocation("East"));
-                        System.out.println("South: " + loc.getNextLocation("South"));
-                        System.out.println("West: " + loc.getNextLocation("West"));
-                        System.out.println();
-                }
+                mapped = hashNewMap(locationList);
+
                 System.out.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
-                        processCommands(parser.parse(scanner.nextLine()), map); ;
+                        processCommands(parser.parse(scanner.nextLine()), map, locationList); ;
                         turns++;
                 }
         }
@@ -163,7 +136,7 @@ public class PizzaQuestApp {
         }
 
         //take the processed command and the delegates this to another
-        private void processCommands(List<String> verbAndNounList, Hashtable<String, Location> map){
+        private void processCommands(List<String> verbAndNounList, Hashtable<String, Location> map, List<Location> newMap){
                 String noun = verbAndNounList.get(verbAndNounList.size()-1);
                 String verb = verbAndNounList.get(0);
 
@@ -175,11 +148,11 @@ public class PizzaQuestApp {
                                 if (noun.equals("")){
                                         break;
                                 }
-                                String nextLocation = gamestate.getPlayerLocation().getAdjLocations().get(noun);
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
-                                System.out.println("The next location will be: " + nextLoc);
-                                if(!nextLocation.equals("")){
-                                        gamestate.setPlayerLocation(map.get(nextLocation.toLowerCase()));
+                                System.out.println();
+                                if(!nextLoc.equals("stonewall")){
+                                        System.out.println(nextLoc);
+                                        gamestate.setPlayerLocation(mapped.get(nextLoc.toLowerCase()));
                                         System.out.println();
                                         System.out.println(player.look(gamestate.getPlayerLocation()));
                                         System.out.println();
