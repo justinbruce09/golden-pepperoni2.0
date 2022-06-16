@@ -55,6 +55,9 @@ public class PizzaQuestApp {
 
         ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
 
+        GameTexts gameTexts = new GameTexts();
+
+
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
@@ -109,12 +112,7 @@ public class PizzaQuestApp {
         }
 
         private void gameInstructions() {
-                try {
-                        String text = Files.readString(Path.of(helpFilePath));
-                        System.out.println(text);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+                        gameTexts.displayCommands();
 
         }
 
@@ -258,11 +256,8 @@ public class PizzaQuestApp {
                         // create a reader
                         Reader reader = Files.newBufferedReader(Paths.get("resources/instructions.json"));
 
-                        // convert JSON file to map
-                        GameTexts texts = gson.fromJson(reader, GameTexts.class);
-                        for (GameText text: texts.getTexts()) {
-                                System.out.println(text.getDescription());
-                        }
+                        // convert JSON file to GameTexts Object which contains the GameText
+                        gameTexts = gson.fromJson(reader, GameTexts.class);
 
                         reader.close();
 

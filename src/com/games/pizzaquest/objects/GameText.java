@@ -29,4 +29,18 @@ public class GameText {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void printHelp() {
+        String help = "\"" + command +  translateOption() + "\" " + description + ".";
+        System.out.println(help);
+
+
+    }
+
+    private String translateOption() {
+        if (option.isEmpty()) {
+            return "";
+        }
+        return " [" + option + "]";
+    }
 }
