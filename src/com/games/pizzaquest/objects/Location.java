@@ -73,20 +73,11 @@ public class Location {
         return name;
     }
 
-    public String npcInRoom(NonPlayerCharacter npc){
-        String npcStatus="There is no one in this room";
-        if(npc!=null){
-            npcStatus="Standing in " + name+ " is "+ npc.getName();
-        }
-        return npcStatus;
-    }
-    public String npcTalk(){
-        return npc.giveQuest();
-    }
 
     @Override
     public String toString(){
-        return "You are in the " + getName() + "." + printBoarders() +"\n"+ npcInRoom(npc);
+        return "You are in the " + getName() + "." + printBoarders() +"\n" +
+                (npc != null?npc.getName()+" is standing in the room": "there is no one in the room");
     }
 
 
