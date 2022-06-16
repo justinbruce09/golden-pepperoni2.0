@@ -72,6 +72,9 @@ public class Location {
     public String getName() {
         return name;
     }
+    public void setNpc(NonPlayerCharacter npc){
+        this.npc = npc;
+    }
 
 
     @Override

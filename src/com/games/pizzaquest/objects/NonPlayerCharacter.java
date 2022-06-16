@@ -5,6 +5,16 @@ import java.util.HashMap;
 public class NonPlayerCharacter implements PlayerInterface{
  private String name="";
  Boolean isQuestActive= false;
+ private String npcLocation="";
+
+
+ public String getNpcLocation() {
+  return npcLocation;
+ }
+
+ public void setNpcLocation(String npcLocation) {
+  this.npcLocation = npcLocation;
+ }
 
  public String getNpcDescription() {
   return npcDescription;
@@ -18,9 +28,10 @@ public class NonPlayerCharacter implements PlayerInterface{
 
  private HashMap<String, String> dialogue = new HashMap<String,String>();
 
- public NonPlayerCharacter(String name, String dialog){
+ public NonPlayerCharacter(String name, String dialog, String npcLocation){
   setName(name);
   setDialogue(dialog);
+  setNpcLocation(npcLocation);
 
  }
 

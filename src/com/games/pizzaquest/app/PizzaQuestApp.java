@@ -25,90 +25,39 @@ public class PizzaQuestApp {
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=10;
-
-        public boolean isGameOver() {
-                return isGameOver;
-        }
-
-        public void setGameOver(boolean gameOver) {
-                isGameOver = gameOver;
-        }
         public final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
         public final Hashtable<String, Location> map = new Hashtable<>();
 
-        //Initial State of the game
-
-
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        private final NonPlayerCharacter npc1 = new NonPlayerCharacter("tony", "Come guess me this riddle, what beats pipe and fiddle\n" +
-                "What's hotter than mustard and milder than cream\n" +
-                "What best wets your whistle, what's clearer than crystal\n" +
-                "Sweeter than honey and stronger than steam");
-        private final Location location =  new Location("Naples", npc1, "nothing", "Rome", "nothing", "nothing");
-      //  private final NonPlayerCharacter npc2 = new NonPlayerCharacter("momma_mozzarella", "I want a coin");
-
-        public final Gamestate gamestate = new Gamestate(location);
+        public  Gamestate gamestate =null;
         public final Player player = new Player(inventory);
 
-
-        ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
+        private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
 
 
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
 
-        Hashtable<String, Location> mapped;
-        List<Location> locationList;
-        Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
-
-        public List<Location> getLocationListFromJson(){
-                ArrayList<Location> locationList = new ArrayList<>();
-                try{
-                        Gson gson = new Gson();
-                        Reader reader = Files.newBufferedReader(Paths.get("resources/gamemap.json"));
-                        locationList = gson.fromJson(reader, locationListType);
-                        reader.close();
-
-                }
-                catch(Exception e){
-                        e.printStackTrace();
-                }
-                return locationList;
-        }
-
-        public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
-                Hashtable<String, Location> newMap = new Hashtable<>();
-                for(Location location: initialMap){
-                        newMap.put(location.getName(), location);
-                }
-                return newMap;
-        }
-
+        private Hashtable<String, Location> gameMap;
+        private List<Location> locationList;
+        private Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
 
 
         public void execute() {
                 TextParser parser = new TextParser();
                 setGameOver(false);
-                //temporary setting of decription for npc
-                //temporarily put in a 1 iteration loop to test user input
                 NpcGson();
-                npcList.get(2).setNpcDescription("Tony is covered in flour and looks like he wants to speak to you!");
-
-
-                //temporarily put in a 4 iteration loop to test user input
-                welcome();
-
-//                locationList = gson.fromJson(jsonData, locationListType);
                 locationList = getLocationListFromJson();
-                mapped = hashNewMap(locationList);
-
+                gameMap = hashNewMap(locationList);
+                setNPC();
+                welcome();
+                gamestate = new Gamestate(gameMap.get("naples"));
                 System.out.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
-                        processCommands(parser.parse(scanner.nextLine()), map, locationList); ;
-                        turns++;
+                        processCommands(parser.parse(scanner.nextLine()), map, locationList);
                 }
         }
         private void welcome() {
@@ -141,6 +90,13 @@ public class PizzaQuestApp {
                 setGameOver(true);
                 System.exit(0);
         }
+        public boolean isGameOver() {
+                return isGameOver;
+        }
+
+        public void setGameOver(boolean gameOver) {
+                isGameOver = gameOver;
+        }
 
         private void resetGame() {
                 setGameOver(true);
@@ -165,10 +121,11 @@ public class PizzaQuestApp {
                                 System.out.println();
                                 if(!nextLoc.equals("nothing")){
                                         System.out.println(nextLoc);
-                                        gamestate.setPlayerLocation(mapped.get(nextLoc.toLowerCase()));
+                                        gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
                                         System.out.println();
                                         System.out.println(player.look(gamestate.getPlayerLocation()));
                                         System.out.println();
+                                        turns++;
                                 }
                                 else{
                                         System.out.println("There is nothing that way!");
@@ -249,7 +206,8 @@ public class PizzaQuestApp {
                         // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
                                 ArrayList<String> temp = map.get(entry.getKey());
-                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),temp.get(0));
+                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),temp.get(0),temp.get(1));
+                                npc.setNpcDescription(temp.get(2));
                                 npcList.add(npc);
                         }
 
@@ -259,9 +217,40 @@ public class PizzaQuestApp {
                 } catch (Exception ex) {
                         ex.printStackTrace();
                 }
+        }
+        public List<Location> getLocationListFromJson(){
+                ArrayList<Location> locationList = new ArrayList<>();
+                try{
+                        Gson gson = new Gson();
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/gamemap.json"));
+                        locationList = gson.fromJson(reader, locationListType);
+                        reader.close();
 
-
-
+                }
+                catch(Exception e){
+                        e.printStackTrace();
+                }
+                return locationList;
         }
 
+        public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
+                Hashtable<String, Location> newMap = new Hashtable<>();
+                for(Location location: initialMap){
+                        newMap.put(location.getName(), location);
+                }
+                return newMap;
+        }
+
+        public void setNPC(){
+                String tempNPCLocation = "";
+                Location setNPCLocation= null;
+                for (NonPlayerCharacter person:npcList
+                     ) {
+                        tempNPCLocation= person.getNpcLocation();
+                        setNPCLocation= gameMap.get(tempNPCLocation);
+                        if(setNPCLocation != null){
+                        setNPCLocation.setNpc(person);}
+                }
+
+        }
 }
