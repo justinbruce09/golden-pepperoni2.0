@@ -5,9 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class PizzaQuestApp {
@@ -42,7 +44,7 @@ public class PizzaQuestApp {
                 "What's hotter than mustard and milder than cream\n" +
                 "What best wets your whistle, what's clearer than crystal\n" +
                 "Sweeter than honey and stronger than steam");
-        private final Location location =  new Location("Naples", npc1, "stonewall", "Rome", "stonewall", "stonewall");
+        private final Location location =  new Location("Naples", npc1, "nothing", "Rome", "nothing", "nothing");
 
         private final NonPlayerCharacter npc2 = new NonPlayerCharacter("momma_mozzarella", "I want a coin");
 
@@ -53,19 +55,29 @@ public class PizzaQuestApp {
         //keep the game running until win/lose condition is met
         private boolean isGameOver = false;
 
-        Gson gson = new Gson();
         Hashtable<String, Location> mapped;
-        String jsonData = "[{'name': 'naples', 'south': 'rome'}, " +
-                "{'name': 'rome', 'east':'tower', 'west': 'pompeii', 'north': 'naples', 'south':'canals'}," +
-                "{'name': 'pompeii', 'south': 'trevi', 'east': 'rome'}," +
-                "{'name': 'trevi', 'south': 'cathedral', 'east': 'canals', 'north':'pompeii'}," +
-                "{'name': 'cathedral', 'north': 'trevi', 'east': 'canals'}," +
-                "{'name': 'canals', 'east': 'almafi', 'north': 'rome', 'west':'trevi', 'south':'cathedral'}," +
-                "{'name': 'almafi', 'west': 'canals', 'north': 'tower'}," +
-                "{'name': 'tower', 'west':'rome', 'south': 'almafi'}]";
-
-        ArrayList<Location> locationList;
+        List<Location> locationList;
         Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
+
+
+
+        public List<Location> getLocationListFromJson(){
+                ArrayList<Location> locationList = new ArrayList<>();
+                try{
+                        Gson gson = new Gson();
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/gamemap.json"));
+                        locationList = gson.fromJson(reader, locationListType);
+                        for(Location loc: locationList){
+                                System.out.println(loc.getName());
+                        }
+                        reader.close();
+
+                }
+                catch(Exception e){
+                        e.printStackTrace();
+                }
+                return locationList;
+        }
 
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
@@ -87,7 +99,8 @@ public class PizzaQuestApp {
                 //temporarily put in a 4 iteration loop to test user input
                 welcome();
 
-                locationList = gson.fromJson(jsonData, locationListType);
+//                locationList = gson.fromJson(jsonData, locationListType);
+                locationList = getLocationListFromJson();
                 mapped = hashNewMap(locationList);
 
                 System.out.println(enterName());
@@ -150,7 +163,7 @@ public class PizzaQuestApp {
                                 }
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
                                 System.out.println();
-                                if(!nextLoc.equals("stonewall")){
+                                if(!nextLoc.equals("nothing")){
                                         System.out.println(nextLoc);
                                         gamestate.setPlayerLocation(mapped.get(nextLoc.toLowerCase()));
                                         System.out.println();
