@@ -1,13 +1,12 @@
 package com.games.pizzaquest.app;
+
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.Reader;
-
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -241,7 +240,7 @@ public class PizzaQuestApp {
                 return locationList;
         }
 
-        }
+
 
         public void GameTextGson() {
                 try {
