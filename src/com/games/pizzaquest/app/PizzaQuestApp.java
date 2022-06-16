@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.Reader;
+
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,7 +46,6 @@ public class PizzaQuestApp {
                 "What best wets your whistle, what's clearer than crystal\n" +
                 "Sweeter than honey and stronger than steam");
         private final Location location =  new Location("Naples", npc1, "nothing", "Rome", "nothing", "nothing");
-
       //  private final NonPlayerCharacter npc2 = new NonPlayerCharacter("momma_mozzarella", "I want a coin");
 
         public final Gamestate gamestate = new Gamestate(location);
