@@ -26,7 +26,6 @@ public class PizzaQuestApp {
         private int turns = 0;
         static final int END_OF_TURNS=10;
         public final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
-        public final Hashtable<String, Location> map = new Hashtable<>();
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
@@ -57,7 +56,10 @@ public class PizzaQuestApp {
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
-                        processCommands(parser.parse(scanner.nextLine()), map, locationList);
+
+                        processCommands(parser.parse(scanner.nextLine()));
+                 
+
                 }
         }
         private void welcome() {
@@ -105,7 +107,7 @@ public class PizzaQuestApp {
         }
 
         //take the processed command and the delegates this to another
-        private void processCommands(List<String> verbAndNounList, Hashtable<String, Location> map, List<Location> newMap){
+        private void processCommands(List<String> verbAndNounList){
                 String noun = verbAndNounList.get(verbAndNounList.size()-1);
                 String verb = verbAndNounList.get(0);
 
@@ -178,7 +180,7 @@ public class PizzaQuestApp {
                                 break;
                         default:
                                 System.out.printf("I don't understand '%s'%n", verbAndNounList);
-                                System.out.println("Type help if you need some guidance on command structure!");;
+                                System.out.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
         }
