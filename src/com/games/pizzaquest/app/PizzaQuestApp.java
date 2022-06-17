@@ -73,6 +73,8 @@ public class PizzaQuestApp {
                         //Display player status including number of turns left
                         int turnsLeft = END_OF_TURNS - turns;
                         System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                        //Players reputation is displayed whenever status is updated
+                        System.out.println("Your reputation is " + reputation);
 
                 }
                 quitGame();
