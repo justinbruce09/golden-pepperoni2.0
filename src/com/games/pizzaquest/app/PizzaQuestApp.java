@@ -55,8 +55,12 @@ public class PizzaQuestApp {
 
                 itemsList = getItemListFromJson();
 
+                addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
+//                gamestate.setPlayerLocation(gameMap.get("cathedral"));
+                System.out.println(gamestate.getPlayerLocation().getItems());
+
                 System.out.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
@@ -208,7 +212,7 @@ public class PizzaQuestApp {
                         Reader reader = Files.newBufferedReader(Paths.get("resources/npc.json"));
 
                         // convert JSON file to map
-                        Map<String, ArrayList<String>> map = gson.fromJson(reader, itemListType);
+                        Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
 
                         // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
@@ -246,6 +250,7 @@ public class PizzaQuestApp {
                         Gson gson = new Gson();
                         Reader reader = Files.newBufferedReader(Paths.get("resources/items.json"));
                         itemsList = gson.fromJson(reader, itemListType );
+
                         System.out.println("Hi, from Json!");
                         System.out.println(itemsList.toString());
                         reader.close();
@@ -257,9 +262,20 @@ public class PizzaQuestApp {
                 return itemsList;
         }
 
+        public void addItemsToLocationMap(Hashtable<String, Location> gameMap, List<Item> itemsList){
+                itemsList.forEach(item -> {
+//                        System.out.println(item.getRoom());
+                        System.out.println(gameMap.get(item.getRoom().toLowerCase()).getItems());
+                        gameMap.get(item.getRoom().toLowerCase()).getItems().add(item);
+                        System.out.println(item);
+                });
+                System.out.println(gameMap.toString());
+        }
+
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
                 for(Location location: initialMap){
+                        location.setItems(new ArrayList<>());
                         newMap.put(location.getName(), location);
                 }
                 return newMap;
