@@ -1,0 +1,7 @@
+[
+    {"name":  "lemon", "type": "npc", "room": "colosseum"},
+    {"name":  "cannoli", "type": "npc", "room": "colosseum"},
+    {"name":  "wine glass", "type": "npc", "room":  "cathedral"},
+    {"name":  "moped", "type":  "vehicle", "room":  "cathedral"}
+]
+

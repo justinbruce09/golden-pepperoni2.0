@@ -41,7 +41,9 @@ public class PizzaQuestApp {
         private Hashtable<String, Location> gameMap;
         private List<Location> locationList;
         private Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
+        private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
+        private List<Item> itemsList;
 
         public void execute() {
                 TextParser parser = new TextParser();
@@ -50,6 +52,9 @@ public class PizzaQuestApp {
                 locationList = getLocationListFromJson();
                 gameMap = hashNewMap(locationList);
                 setNPC();
+
+                itemsList = getItemListFromJson();
+
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
                 System.out.println(enterName());
@@ -142,7 +147,7 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        System.out.println(player.look(new Item(noun)));
+                                        System.out.println(player.look(new Item(noun, "npc", "colloseum")));
                                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
                                         System.out.println(gamestate.getPlayerLocation().npc.getNpcDescription());
                         }
@@ -203,7 +208,7 @@ public class PizzaQuestApp {
                         Reader reader = Files.newBufferedReader(Paths.get("resources/npc.json"));
 
                         // convert JSON file to map
-                        Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
+                        Map<String, ArrayList<String>> map = gson.fromJson(reader, itemListType);
 
                         // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
@@ -233,6 +238,23 @@ public class PizzaQuestApp {
                         e.printStackTrace();
                 }
                 return locationList;
+        }
+
+        public List<Item> getItemListFromJson() {
+                ArrayList<Item> itemsList = new ArrayList<>();
+                try{
+                        Gson gson = new Gson();
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/items.json"));
+                        itemsList = gson.fromJson(reader, itemListType );
+                        System.out.println("Hi, from Json!");
+                        System.out.println(itemsList.toString());
+                        reader.close();
+                }
+                catch (IOException e) {
+                        e.printStackTrace();
+                }
+
+                return itemsList;
         }
 
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
