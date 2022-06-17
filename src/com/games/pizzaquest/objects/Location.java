@@ -9,12 +9,13 @@ public class Location {
     private String east;
     private String south;
     private String west;
+    private ArrayList<Item> items;
 
     public void setItems(ArrayList<Item> items) {
         this.items = items;
     }
 
-    private ArrayList<Item> items;
+
 
 
     public ArrayList<Item> getItems() {
