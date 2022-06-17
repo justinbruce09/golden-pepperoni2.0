@@ -25,7 +25,8 @@ public class PizzaQuestApp {
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=10;
-        public final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
+        static final int WINNING_REPUTATION= 20;
+        public final List<String> itemList = List.of("pizza_cutter","olive_oil", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
@@ -33,6 +34,10 @@ public class PizzaQuestApp {
         public final Player player = new Player(inventory);
 
         private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
+        private int reputation =0;
+
+        GameTexts gameTexts = new GameTexts();
+
 
 
         //keep the game running until win/lose condition is met
@@ -48,29 +53,42 @@ public class PizzaQuestApp {
         public void execute() {
                 TextParser parser = new TextParser();
                 setGameOver(false);
+                //temporary setting of description for npc
+                //temporarily put in a 1 iteration loop to test user input
                 NpcGson();
                 locationList = getLocationListFromJson();
                 gameMap = hashNewMap(locationList);
                 setNPC();
-
+                GameTextGson();
                 itemsList = getItemListFromJson();
 
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-//                gamestate.setPlayerLocation(gameMap.get("cathedral"));
-                System.out.println(gamestate.getPlayerLocation().getItems());
-
                 System.out.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
 
                         processCommands(parser.parse(scanner.nextLine()));
-                 
+                        checkIfGameIsWon();
+                        // Increment turns by 1
+                        //Display player status including number of turns left
+                        int turnsLeft = END_OF_TURNS - turns;
+                        System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
 
                 }
+                quitGame();
         }
+
+
+        private void checkIfGameIsWon() {
+                if(reputation >=WINNING_REPUTATION){
+                        System.out.println("You win");
+                        quitGame();
+                }
+        }
+
         private void welcome() {
                 try {
                         String text = Files.readString(Path.of(bannerFilePath));
@@ -81,12 +99,7 @@ public class PizzaQuestApp {
         }
 
         private void gameInstructions() {
-                try {
-                        String text = Files.readString(Path.of(helpFilePath));
-                        System.out.println(text);
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
+                        gameTexts.displayCommands();
 
         }
 
@@ -119,6 +132,7 @@ public class PizzaQuestApp {
         private void processCommands(List<String> verbAndNounList){
                 String noun = verbAndNounList.get(verbAndNounList.size()-1);
                 String verb = verbAndNounList.get(0);
+                String person= "";
 
                 switch (verb) {
                         case "quit":
@@ -151,7 +165,7 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        System.out.println(player.look(new Item(noun, "npc", "colloseum")));
+                                        System.out.println(player.look(new Item(noun)));
                                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
                                         System.out.println(gamestate.getPlayerLocation().npc.getNpcDescription());
                         }
@@ -171,6 +185,9 @@ public class PizzaQuestApp {
                                 //removes item from inventory
                                 if (noun.equals("")){
                                         break;
+                                }
+                                if(gamestate.getPlayerLocation().npc!=null){
+                                       reputation = gamestate.getPlayerLocation().npc.processItem(noun);
                                 }
                                 player.removeFromInventory(noun);
                                 break;
@@ -216,9 +233,8 @@ public class PizzaQuestApp {
 
                         // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-                                ArrayList<String> temp = map.get(entry.getKey());
-                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),temp.get(0),temp.get(1));
-                                npc.setNpcDescription(temp.get(2));
+                                ArrayList<String> JSONnpc = map.get(entry.getKey());
+                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),JSONnpc.get(0),JSONnpc.get(1),JSONnpc.get(2),JSONnpc.get(3),JSONnpc.get(4));
                                 npcList.add(npc);
                         }
 
@@ -271,6 +287,28 @@ public class PizzaQuestApp {
                 });
                 System.out.println(gameMap.toString());
         }
+
+
+        public void GameTextGson() {
+                try {
+                        // create Gson instance
+                        Gson gson = new Gson();
+
+                        // create a reader
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/instructions.json"));
+
+                        // convert JSON file to GameTexts Object which contains the GameText
+                        gameTexts = gson.fromJson(reader, GameTexts.class);
+
+                        reader.close();
+
+                } catch (Exception ex) {
+                        ex.printStackTrace();
+                }
+        }
+
+
+
 
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
