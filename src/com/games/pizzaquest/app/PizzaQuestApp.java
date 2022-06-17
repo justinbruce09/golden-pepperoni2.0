@@ -71,6 +71,7 @@ public class PizzaQuestApp {
                         checkIfGameIsWon();
 
                 }
+                quitGame();
         }
 
         private void checkIfGameIsWon() {
