@@ -25,7 +25,8 @@ public class PizzaQuestApp {
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=10;
-        public final List<String> itemList = List.of("pizza_cutter", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
+        static final int WINNING_REPUTATION= 20;
+        public final List<String> itemList = List.of("pizza_cutter","olive_oil", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
@@ -33,6 +34,7 @@ public class PizzaQuestApp {
         public final Player player = new Player(inventory);
 
         private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
+        private int reputation =0;
 
         GameTexts gameTexts = new GameTexts();
 
@@ -56,8 +58,6 @@ public class PizzaQuestApp {
                 gameMap = hashNewMap(locationList);
                 setNPC();
                 GameTextGson();
-                npcList.get(2).setNpcDescription("Tony is covered in flour and looks like he wants to speak to you!");
-
 
                 //temporarily put in a 4 iteration loop to test user input
                 welcome();
@@ -68,13 +68,23 @@ public class PizzaQuestApp {
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
 
                         processCommands(parser.parse(scanner.nextLine()));
+                        checkIfGameIsWon();
+
+                }
+                quitGame();
+        }
                         // Increment turns by 1
                         //Display player status including number of turns left
                         int turnsLeft = END_OF_TURNS - turns;
                         System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
 
+        private void checkIfGameIsWon() {
+                if(reputation >=WINNING_REPUTATION){
+                        System.out.println("You win");
+                        quitGame();
                 }
         }
+
         private void welcome() {
                 try {
                         String text = Files.readString(Path.of(bannerFilePath));
@@ -118,6 +128,7 @@ public class PizzaQuestApp {
         private void processCommands(List<String> verbAndNounList){
                 String noun = verbAndNounList.get(verbAndNounList.size()-1);
                 String verb = verbAndNounList.get(0);
+                String person= "";
 
                 switch (verb) {
                         case "quit":
@@ -171,6 +182,9 @@ public class PizzaQuestApp {
                                 if (noun.equals("")){
                                         break;
                                 }
+                                if(gamestate.getPlayerLocation().npc!=null){
+                                       reputation = gamestate.getPlayerLocation().npc.processItem(noun);
+                                }
                                 player.removeFromInventory(noun);
                                 break;
                         case "inventory":
@@ -215,9 +229,8 @@ public class PizzaQuestApp {
 
                         // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
-                                ArrayList<String> temp = map.get(entry.getKey());
-                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),temp.get(0),temp.get(1));
-                                npc.setNpcDescription(temp.get(2));
+                                ArrayList<String> JSONnpc = map.get(entry.getKey());
+                                NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),JSONnpc.get(0),JSONnpc.get(1),JSONnpc.get(2),JSONnpc.get(3),JSONnpc.get(4));
                                 npcList.add(npc);
                         }
 

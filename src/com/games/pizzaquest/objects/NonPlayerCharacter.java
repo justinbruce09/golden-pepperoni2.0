@@ -6,12 +6,54 @@ public class NonPlayerCharacter implements PlayerInterface{
  private String name="";
  Boolean isQuestActive= false;
  private String npcLocation="";
+ private int repToGive=0;
+
+
+ private String requiredQuestItemString="";
+
+ public NonPlayerCharacter(
+         String name, String dialog, String npcLocation,String description, String reputation, String questItem
+ ){
+  setName(name);
+  setDialogue(dialog);
+  setNpcLocation(npcLocation);
+  setNpcDescription(description);
+  int numberOfRep=0;
+  if(!reputation.equals("")){
+   numberOfRep=Integer.parseInt(reputation);
+  setRepToGive(numberOfRep);
+  }
+  setRequiredQuestItemString(questItem);
+ }
+
+ public int getRepToGive() {
+  return repToGive;
+ }
+
+ public void setRepToGive(int repToGive) {
+  this.repToGive = repToGive;
+ }
+
+ public int processItem(String item){
+  int sendRep=0;
+  if(item.equals(getRequiredQuestItemString())){
+   sendRep=getRepToGive();
+  }
+  return sendRep;
+ }
 
 
  public String getNpcLocation() {
   return npcLocation;
  }
 
+ public String getRequiredQuestItemString() {
+  return requiredQuestItemString;
+ }
+
+ public void setRequiredQuestItemString(String requiredQuestItemString) {
+  this.requiredQuestItemString = requiredQuestItemString;
+ }
  public void setNpcLocation(String npcLocation) {
   this.npcLocation = npcLocation;
  }
@@ -27,13 +69,6 @@ public class NonPlayerCharacter implements PlayerInterface{
  private String npcDescription= "";
 
  private HashMap<String, String> dialogue = new HashMap<String,String>();
-
- public NonPlayerCharacter(String name, String dialog, String npcLocation){
-  setName(name);
-  setDialogue(dialog);
-  setNpcLocation(npcLocation);
-
- }
 
 
  public void setDialogue(String quest){
