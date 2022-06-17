@@ -68,7 +68,10 @@ public class PizzaQuestApp {
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
 
                         processCommands(parser.parse(scanner.nextLine()));
-
+                        // Increment turns by 1
+                        //Display player status including number of turns left
+                        int turnsLeft = END_OF_TURNS - turns;
+                        System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
 
                 }
         }
