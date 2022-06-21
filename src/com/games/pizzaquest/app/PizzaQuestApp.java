@@ -33,7 +33,7 @@ public class PizzaQuestApp {
         //track turn may be moved to player
         private int turns = 0;
         static final int END_OF_TURNS=10;
-        static final int WINNING_REPUTATION= 20;
+        static final int WINNING_REPUTATION= 40;
         public final List<String> itemList = List.of("pizza_cutter","olive_oil", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
 
         //Initial State of the Player, inventory and starting location
