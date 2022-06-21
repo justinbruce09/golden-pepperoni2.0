@@ -5,9 +5,11 @@ import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.Reader;
+
+import java.io.*;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +21,10 @@ public class PizzaQuestApp {
         static Scanner scanner = new Scanner(System.in);
         //text parser for users to use
         //path for some ascii art
-        private static final String bannerFilePath = "resources/WelcomeSplash.txt";
-        private static final String helpFilePath = "resources/Instructions.txt";
+        private static final String bannerFilePath = "WelcomeSplash.txt";
+        private static final String npcFilePath = "npc.json";
+        private static final String locationFilePath = "gamemap.json";
+        private static final String textFilePath = "instructions.json";
 
         //track turn may be moved to player
         private int turns = 0;
@@ -87,9 +91,15 @@ public class PizzaQuestApp {
         }
 
         private void welcome() {
-                try {
-                        String text = Files.readString(Path.of(bannerFilePath));
-                        System.out.println(text);
+                InputStream welcomeSplash = getFileFromResourceAsStream(bannerFilePath);
+                StringBuilder textBuilder = new StringBuilder();
+                try  (Reader reader = new BufferedReader(new InputStreamReader
+                        (welcomeSplash, Charset.forName(StandardCharsets.UTF_8.name())))){
+                        int c = 0;
+                        while ((c = reader.read()) != -1) {
+                                textBuilder.append((char) c);
+                        }
+                        System.out.println(textBuilder);
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
@@ -130,13 +140,18 @@ public class PizzaQuestApp {
                 String noun = verbAndNounList.get(verbAndNounList.size()-1);
                 String verb = verbAndNounList.get(0);
                 String person= "";
+                ArrayList<String> validDirections= new ArrayList<String>();
+                validDirections.add("north");
+                validDirections.add("east");
+                validDirections.add("west");
+                validDirections.add("south");
 
                 switch (verb) {
                         case "quit":
                                 quitGame();
                                 break;
                         case "go":
-                                if (noun.equals("")){
+                                if (noun.equals("") || !validDirections.contains(noun)){
                                         break;
                                 }
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
@@ -218,38 +233,27 @@ public class PizzaQuestApp {
         }
 
         public void NpcGson(){
-                try {
                         // create Gson instance
                         Gson gson = new Gson();
-
-                        // create a reader
-                        Reader reader = Files.newBufferedReader(Paths.get("resources/npc.json"));
-
+                        InputStream npcJSON = getFileFromResourceAsStream(npcFilePath);
                         // convert JSON file to map
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(npcJSON, "UTF-8"))){
                         Map<String, ArrayList<String>> map = gson.fromJson(reader, Map.class);
-
-                        // print map entries
                         for (Map.Entry<String, ArrayList<String>> entry : map.entrySet()) {
                                 ArrayList<String> JSONnpc = map.get(entry.getKey());
                                 NonPlayerCharacter npc = new NonPlayerCharacter(entry.getKey(),JSONnpc.get(0),JSONnpc.get(1),JSONnpc.get(2),JSONnpc.get(3),JSONnpc.get(4));
                                 npcList.add(npc);
                         }
-
-                        // close reader
-                        reader.close();
-
                 } catch (Exception ex) {
                         ex.printStackTrace();
                 }
         }
         public List<Location> getLocationListFromJson(){
                 ArrayList<Location> locationList = new ArrayList<>();
-                try{
                         Gson gson = new Gson();
-                        Reader reader = Files.newBufferedReader(Paths.get("resources/gamemap.json"));
+                        InputStream locationJSON = getFileFromResourceAsStream(locationFilePath);
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(locationJSON, "UTF-8"))){
                         locationList = gson.fromJson(reader, locationListType);
-                        reader.close();
-
                 }
                 catch(Exception e){
                         e.printStackTrace();
@@ -260,17 +264,14 @@ public class PizzaQuestApp {
 
 
         public void GameTextGson() {
-                try {
+                Gson gson = new Gson();
+                InputStream locationJSON = getFileFromResourceAsStream(textFilePath);
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(locationJSON, "UTF-8"))){
                         // create Gson instance
-                        Gson gson = new Gson();
-
-                        // create a reader
-                        Reader reader = Files.newBufferedReader(Paths.get("resources/instructions.json"));
 
                         // convert JSON file to GameTexts Object which contains the GameText
                         gameTexts = gson.fromJson(reader, GameTexts.class);
 
-                        reader.close();
 
                 } catch (Exception ex) {
                         ex.printStackTrace();
@@ -295,5 +296,14 @@ public class PizzaQuestApp {
                         setNPCLocation.setNpc(person);}
                 }
 
+        }
+        private static InputStream getFileFromResourceAsStream(String fileName) {
+                ClassLoader classLoader = PizzaQuestApp.class.getClassLoader();
+                InputStream inputStream = classLoader.getResourceAsStream(fileName);
+                if (inputStream == null) {
+                        throw new IllegalArgumentException("file not found! " + fileName);
+                } else {
+                        return inputStream;
+                }
         }
 }
