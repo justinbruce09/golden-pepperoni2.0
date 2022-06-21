@@ -9,6 +9,19 @@ public class Location {
     private String east;
     private String south;
     private String west;
+    private ArrayList<Item> items;
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
+
+
+
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
 
     public String getNorth() {
         return north;
@@ -69,6 +82,17 @@ public class Location {
                 ",\nTo the south we have " + getSouth() + ",\nTo the west we have " + getWest()+".";
     }
 
+    private StringBuilder printItems(){
+        StringBuilder showItems = new StringBuilder();
+        //System.out.println(items);
+        if ( items != null) {
+            for (Item item : getItems()){
+                showItems.append("I see a " + item.getName() + ".\n");
+            }
+        }
+        return showItems;
+    }
+
     public String getName() {
         return name;
     }
@@ -79,7 +103,7 @@ public class Location {
 
     @Override
     public String toString(){
-        return "You are in the " + getName() + "." + printBoarders() +"\n" +
+        return "You are in the " + getName() + "." + printBoarders() +"\n" + printItems() +
                 (npc != null?npc.getName()+" is standing in the room": "there is no one in the room");
     }
 
