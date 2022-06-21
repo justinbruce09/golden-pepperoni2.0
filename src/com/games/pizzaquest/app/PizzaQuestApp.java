@@ -277,7 +277,6 @@ public class PizzaQuestApp {
                 InputStream locationJSON = getFileFromResourceAsStream(itemFilePath);
                 try(BufferedReader reader = new BufferedReader(new InputStreamReader(locationJSON, "UTF-8"))){
                         itemsList = gson.fromJson(reader, itemListType );
-                        System.out.println(itemsList.toString());
                 }
                 catch (IOException e) {
                         e.printStackTrace();
@@ -288,11 +287,8 @@ public class PizzaQuestApp {
 
         public void addItemsToLocationMap(Hashtable<String, Location> gameMap, List<Item> itemsList){
                 itemsList.forEach(item -> {
-//                        System.out.println(gameMap.get(item.getRoom().toLowerCase()).getItems());
                         gameMap.get(item.getRoom().toLowerCase()).getItems().add(item);
-//                        System.out.println(item);
                 });
-                System.out.println(gameMap.toString());
         }
 
 
