@@ -303,8 +303,6 @@ public class PizzaQuestApp {
         }
 
 
-
-
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
                 for(Location location: initialMap){
