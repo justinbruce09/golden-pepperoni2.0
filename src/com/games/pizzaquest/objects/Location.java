@@ -15,13 +15,9 @@ public class Location {
         this.items = items;
     }
 
-
-
-
     public ArrayList<Item> getItems() {
         return items;
     }
-
 
     public String getNorth() {
         return north;
@@ -84,7 +80,6 @@ public class Location {
 
     private StringBuilder printItems(){
         StringBuilder showItems = new StringBuilder();
-        //System.out.println(items);
         if ( items != null) {
             for (Item item : getItems()){
                 showItems.append("I see a " + item.getName() + ".\n");
