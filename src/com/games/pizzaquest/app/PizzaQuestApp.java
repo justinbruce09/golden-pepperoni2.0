@@ -5,17 +5,10 @@ import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.Reader;
-
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class PizzaQuestApp {
@@ -84,6 +77,8 @@ public class PizzaQuestApp {
                         //Display player status including number of turns left
                         int turnsLeft = END_OF_TURNS - turns;
                         System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                        //Players reputation is displayed whenever status is updated
+                        System.out.println("Your reputation is " + reputation);
 
                 }
                 quitGame();
