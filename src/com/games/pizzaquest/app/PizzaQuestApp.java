@@ -1,5 +1,4 @@
 package com.games.pizzaquest.app;
-
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
 import com.google.gson.Gson;
@@ -7,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.Reader;
+
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +30,7 @@ public class PizzaQuestApp {
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        public  Gamestate gamestate =null;
+        public  Gamestate gamestate =  null;
         public final Player player = new Player(inventory);
 
         private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();
@@ -46,7 +46,9 @@ public class PizzaQuestApp {
         private Hashtable<String, Location> gameMap;
         private List<Location> locationList;
         private Type locationListType = new TypeToken<ArrayList<Location>>(){}.getType();
+        private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
+        private List<Item> itemsList;
 
         public void execute() {
                 TextParser parser = new TextParser();
@@ -58,8 +60,9 @@ public class PizzaQuestApp {
                 gameMap = hashNewMap(locationList);
                 setNPC();
                 GameTextGson();
+                itemsList = getItemListFromJson();
 
-                //temporarily put in a 4 iteration loop to test user input
+                addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
                 System.out.println(enterName());
@@ -257,6 +260,33 @@ public class PizzaQuestApp {
                 return locationList;
         }
 
+        public List<Item> getItemListFromJson() {
+                ArrayList<Item> itemsList = new ArrayList<>();
+                try{
+                        Gson gson = new Gson();
+                        Reader reader = Files.newBufferedReader(Paths.get("resources/items.json"));
+                        itemsList = gson.fromJson(reader, itemListType );
+
+                        System.out.println("Hi, from Json!");
+                        System.out.println(itemsList.toString());
+                        reader.close();
+                }
+                catch (IOException e) {
+                        e.printStackTrace();
+                }
+
+                return itemsList;
+        }
+
+        public void addItemsToLocationMap(Hashtable<String, Location> gameMap, List<Item> itemsList){
+                itemsList.forEach(item -> {
+//                        System.out.println(item.getRoom());
+                        System.out.println(gameMap.get(item.getRoom().toLowerCase()).getItems());
+                        gameMap.get(item.getRoom().toLowerCase()).getItems().add(item);
+                        System.out.println(item);
+                });
+                System.out.println(gameMap.toString());
+        }
 
 
         public void GameTextGson() {
@@ -276,9 +306,14 @@ public class PizzaQuestApp {
                         ex.printStackTrace();
                 }
         }
+
+
+
+
         public Hashtable<String, Location> hashNewMap(List<Location> initialMap) {
                 Hashtable<String, Location> newMap = new Hashtable<>();
                 for(Location location: initialMap){
+                        location.setItems(new ArrayList<>());
                         newMap.put(location.getName(), location);
                 }
                 return newMap;
