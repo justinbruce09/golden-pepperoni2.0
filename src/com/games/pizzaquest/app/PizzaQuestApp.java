@@ -30,7 +30,7 @@ public class PizzaQuestApp {
 
         //Initial State of the Player, inventory and starting location
         private final Set<Item> inventory = new HashSet<>();
-        public  Gamestate gamestate =null;
+        public  Gamestate gamestate =  null;
         public final Player player = new Player(inventory);
 
         private final ArrayList<NonPlayerCharacter> npcList= new ArrayList<NonPlayerCharacter>();

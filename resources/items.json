@@ -4,7 +4,7 @@
     {"name":  "espresso", "type":  "npc", "room":  "trevi"},
     {"name":  "coin", "type":  "npc", "room":  "trevi"},
     {"name":  "horse", "type":  "vehicle", "room":  "tower"},
-    {"name":  "coin", "type":  "npc", "room":  "canal"},
+    {"name":  "coin", "type":  "npc", "room":  "canals"},
     {"name":  "cannoli", "type":  "npc", "room":  "pompeii"},
     {"name":  "cookbook", "type":  "npc", "room":  "pompeii"},
     {"name":  "wine glass", "type":  "npc", "room":  "naples"},
