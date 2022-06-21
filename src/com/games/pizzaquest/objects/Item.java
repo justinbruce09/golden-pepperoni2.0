@@ -30,6 +30,6 @@ public class Item {
 
     @Override
     public String toString(){
-        return "This is a " + getName() + ".";
+        return  getName();
     }
 }
