@@ -7,10 +7,10 @@
     {"name":  "coin", "type":  "npc", "room":  "canals"},
     {"name":  "cannoli", "type":  "npc", "room":  "pompeii"},
     {"name":  "cookbook", "type":  "npc", "room":  "pompeii"},
-    {"name":  "wine glass", "type":  "npc", "room":  "naples"},
-    {"name":  "olive oil", "type":  "npc", "room":  "naples"},
-    {"name":  "pizza cutter", "type":  "npc", "room":  "naples"},
-    {"name":  "marble sculpture", "type":  "static", "room":  "amalfi"}
+    {"name":  "wine_glass", "type":  "npc", "room":  "naples"},
+    {"name":  "olive_oil", "type":  "npc", "room":  "naples"},
+    {"name":  "pizza_cutter", "type":  "npc", "room":  "naples"},
+    {"name":  "marble_sculpture", "type":  "static", "room":  "amalfi"}
     ]
 
 

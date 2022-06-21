@@ -28,6 +28,7 @@ public class PizzaQuestApp {
         private static final String npcFilePath = "npc.json";
         private static final String locationFilePath = "gamemap.json";
         private static final String textFilePath = "instructions.json";
+        private static final String itemFilePath = "items.json";
 
         //track turn may be moved to player
         private int turns = 0;
@@ -269,14 +270,12 @@ public class PizzaQuestApp {
 
         public List<Item> getItemListFromJson() {
                 ArrayList<Item> itemsList = new ArrayList<>();
-                try{
                         Gson gson = new Gson();
-                        Reader reader = Files.newBufferedReader(Paths.get("resources/items.json"));
+                InputStream locationJSON = getFileFromResourceAsStream(itemFilePath);
+                try(BufferedReader reader = new BufferedReader(new InputStreamReader(locationJSON, "UTF-8"))){
                         itemsList = gson.fromJson(reader, itemListType );
-
                         System.out.println("Hi, from Json!");
                         System.out.println(itemsList.toString());
-                        reader.close();
                 }
                 catch (IOException e) {
                         e.printStackTrace();

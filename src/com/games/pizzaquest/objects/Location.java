@@ -82,13 +82,13 @@ public class Location {
                 ",\nTo the south we have " + getSouth() + ",\nTo the west we have " + getWest()+".";
     }
 
-    private  String printItems(){
-        String showItems = "Hi ";
-        System.out.println(items);
+    private StringBuilder printItems(){
+        StringBuilder showItems = new StringBuilder();
+        //System.out.println(items);
         if ( items != null) {
-            getItems().forEach(item -> {
-                showItems.concat("I see a " + item + ".\n");
-            });
+            for (Item item : getItems()){
+                showItems.append("I see a " + item.getName() + ".\n");
+            }
         }
         return showItems;
     }
