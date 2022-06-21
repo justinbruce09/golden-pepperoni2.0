@@ -195,6 +195,9 @@ public class PizzaQuestApp {
                         case "take":
                                 //add item to inventory
                                 player.addToInventory(noun);
+                                gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun));
+                                System.out.println("Player inventory: " + player.getInventory());
+                                System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
                                 break;
                         case "talk":
                                 //add item to inventory
@@ -274,7 +277,6 @@ public class PizzaQuestApp {
                 InputStream locationJSON = getFileFromResourceAsStream(itemFilePath);
                 try(BufferedReader reader = new BufferedReader(new InputStreamReader(locationJSON, "UTF-8"))){
                         itemsList = gson.fromJson(reader, itemListType );
-                        System.out.println("Hi, from Json!");
                         System.out.println(itemsList.toString());
                 }
                 catch (IOException e) {
@@ -286,10 +288,9 @@ public class PizzaQuestApp {
 
         public void addItemsToLocationMap(Hashtable<String, Location> gameMap, List<Item> itemsList){
                 itemsList.forEach(item -> {
-//                        System.out.println(item.getRoom());
-                        System.out.println(gameMap.get(item.getRoom().toLowerCase()).getItems());
+//                        System.out.println(gameMap.get(item.getRoom().toLowerCase()).getItems());
                         gameMap.get(item.getRoom().toLowerCase()).getItems().add(item);
-                        System.out.println(item);
+//                        System.out.println(item);
                 });
                 System.out.println(gameMap.toString());
         }
