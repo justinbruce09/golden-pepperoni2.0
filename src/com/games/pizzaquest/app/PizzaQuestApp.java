@@ -199,7 +199,7 @@ public class PizzaQuestApp {
                                 }
                                 break;
                         case "talk":
-                                //add item to inventory
+                                //talk to NPC to inventory
                                 talk(noun);
                                 break;
                         case "give":
