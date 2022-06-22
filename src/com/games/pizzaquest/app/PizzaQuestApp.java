@@ -205,7 +205,7 @@ public class PizzaQuestApp {
                                 break;
                         case "give":
                                 //removes item from inventory
-                                if (noun.equals("")){
+                                if (!player.getInventory().contains(noun)){
                                         break;
                                 }
                                 if(gamestate.getPlayerLocation().npc!=null){
