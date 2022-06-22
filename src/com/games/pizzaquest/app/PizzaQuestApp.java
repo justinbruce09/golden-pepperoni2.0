@@ -195,7 +195,7 @@ public class PizzaQuestApp {
                                 System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
                                 break;
                         case "talk":
-                                //add item to inventory
+                                //talk to NPC to inventory
                                 talk(noun);
                                 break;
                         case "give":

@@ -2,7 +2,7 @@
 [
   {
     "command": "go",
-    "option": "direction(North, South, East, West",
+    "option": "direction(North, South, East, West)",
     "description": "to move"
   },
   {
@@ -14,6 +14,11 @@
     "command": "look",
     "option": "",
     "description": "to describe your location or item in room"
+  },
+  {
+    "command": "talk",
+    "option": "",
+    "description": "speak to an NPC"
   },
   {
     "command": "inventory",
