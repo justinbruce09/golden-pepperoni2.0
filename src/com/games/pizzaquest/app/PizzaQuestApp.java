@@ -154,6 +154,7 @@ public class PizzaQuestApp {
                                 break;
                         case "go":
                                 if (noun.equals("") || !validDirections.contains(noun)){
+                                        System.out.println("There is nothing that way!");
                                         break;
                                 }
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
@@ -188,11 +189,14 @@ public class PizzaQuestApp {
                                 }
                                 break;
                         case "take":
-                                //add item to inventory
-                                player.addToInventory(noun);
-                                gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun));
-                                System.out.println("Player inventory: " + player.getInventory());
-                                System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
+                                        //add item to inventory
+                                        player.addToInventory(noun);
+                                        System.out.println("Player inventory: " + player.getInventory());
+                                        System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                                } else {
+                                        System.out.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
+                                }
                                 break;
                         case "talk":
                                 //add item to inventory
