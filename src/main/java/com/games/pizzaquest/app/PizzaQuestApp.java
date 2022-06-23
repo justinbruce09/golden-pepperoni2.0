@@ -2,6 +2,7 @@ package com.games.pizzaquest.app;
 
 import com.games.pizzaquest.objects.*;
 import com.games.pizzaquest.textparser.TextParser;
+import com.games.pizzaquest.util.PizzaPrinter;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -66,7 +67,7 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-                System.out.println(enterName());
+                PizzaPrinter.SOUT.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
@@ -76,9 +77,9 @@ public class PizzaQuestApp {
                         // Increment turns by 1
                         //Display player status including number of turns left
                         int turnsLeft = END_OF_TURNS - turns;
-                        System.out.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                        PizzaPrinter.SOUT.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
                         //Players reputation is displayed whenever status is updated
-                        System.out.println("Your reputation is " + reputation);
+                        PizzaPrinter.SOUT.println("Your reputation is " + reputation);
 
                 }
                 quitGame();
@@ -87,7 +88,7 @@ public class PizzaQuestApp {
 
         private void checkIfGameIsWon() {
                 if(reputation >=WINNING_REPUTATION){
-                        System.out.println("You win");
+                        PizzaPrinter.SOUT.println("You win");
                         quitGame();
                 }
         }
@@ -101,7 +102,7 @@ public class PizzaQuestApp {
                         while ((c = reader.read()) != -1) {
                                 textBuilder.append((char) c);
                         }
-                        System.out.println(textBuilder);
+                        PizzaPrinter.SOUT.println(textBuilder.toString());
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
@@ -113,13 +114,13 @@ public class PizzaQuestApp {
         }
 
         private String enterName() {
-                System.out.println("Please enter your name: ");
+                PizzaPrinter.SOUT.println("Please enter your name: ");
                 String playerName = scanner.nextLine();
                 return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
         private void quitGame() {
-                System.out.println("You'll always have a pizza our heart ... Goodbye!");
+                PizzaPrinter.SOUT.println("You'll always have a pizza our heart ... Goodbye!");
                 setGameOver(true);
                 System.exit(0);
         }
@@ -154,21 +155,21 @@ public class PizzaQuestApp {
                                 break;
                         case "go":
                                 if (noun.equals("") || !validDirections.contains(noun)){
-                                        System.out.println("There is nothing that way!");
+                                        PizzaPrinter.SOUT.println("There is nothing that way!");
                                         break;
                                 }
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
-                                System.out.println();
+                                PizzaPrinter.SOUT.println();
                                 if(!nextLoc.equals("nothing")){
-                                        System.out.println(nextLoc);
+                                        PizzaPrinter.SOUT.println(nextLoc);
                                         gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
-                                        System.out.println();
-                                        System.out.println(player.look(gamestate.getPlayerLocation()));
-                                        System.out.println();
+                                        PizzaPrinter.SOUT.println();
+                                        PizzaPrinter.SOUT.println(player.look(gamestate.getPlayerLocation()));
+                                        PizzaPrinter.SOUT.println();
                                         turns++;
                                 }
                                 else{
-                                        System.out.println("There is nothing that way!");
+                                        PizzaPrinter.SOUT.println("There is nothing that way!");
                                 }
                                 break;
                         case "look":
@@ -180,22 +181,22 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        System.out.println(player.look(new Item(noun)));
+                                        PizzaPrinter.SOUT.println(player.look(new Item(noun)));
                                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
-                                        System.out.println(gamestate.getPlayerLocation().npc.getNpcDescription());
+                                        PizzaPrinter.SOUT.println(gamestate.getPlayerLocation().npc.getNpcDescription());
                         }
                                 else{
-                                        System.out.println(player.look(gamestate.getPlayerLocation()));
+                                        PizzaPrinter.SOUT.println(player.look(gamestate.getPlayerLocation()));
                                 }
                                 break;
                         case "take":
                                 if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
                                         //add item to inventory
                                         player.addToInventory(noun);
-                                        System.out.println("Player inventory: " + player.getInventory());
-                                        System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                                        PizzaPrinter.SOUT.println("Player inventory: " + player.getInventory());
+                                        PizzaPrinter.SOUT.println("Items in location: " + gamestate.getPlayerLocation().getItems());
                                 } else {
-                                        System.out.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
+                                        PizzaPrinter.SOUT.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
                                 }
                                 break;
                         case "talk":
@@ -214,9 +215,9 @@ public class PizzaQuestApp {
                                 break;
                         case "inventory":
                                 Set<Item> tempInventory = player.getInventory();
-                                System.out.println("Items in the Inventory");
+                                PizzaPrinter.SOUT.println("Items in the Inventory");
                                 for (Item item : tempInventory) {
-                                        System.out.println(item.getName());
+                                        PizzaPrinter.SOUT.println(item.getName());
                                 }
                                 break;
                         case "help":
@@ -226,8 +227,8 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                System.out.printf("I don't understand '%s'%n", verbAndNounList);
-                                System.out.println("Type help if you need some guidance on command structure!");
+                                PizzaPrinter.SOUT.println("I don't understand " + verbAndNounList);
+                                PizzaPrinter.SOUT.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
         }
@@ -235,9 +236,9 @@ public class PizzaQuestApp {
         private void talk(String noun) {
                 Location playerLocation = gamestate.getPlayerLocation();
                 if(playerLocation.npc != null && playerLocation.npc.getName().equals(noun)){
-                        System.out.println(playerLocation.npc.giveQuest());
+                        PizzaPrinter.SOUT.print(playerLocation.npc.giveQuest() + "\n");
                 }else{
-                        System.out.println("That player many not be in in this room or even exist!");
+                        PizzaPrinter.SOUT.println("That player many not be in in this room or even exist!");
                 }
         }
 
