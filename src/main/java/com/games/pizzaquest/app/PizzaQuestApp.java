@@ -189,10 +189,9 @@ public class PizzaQuestApp {
                                 }
                                 break;
                         case "take":
-                                if(gamestate.getPlayerLocation().getItems().contains(noun)) {
+                                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
                                         //add item to inventory
                                         player.addToInventory(noun);
-                                        gamestate.getPlayerLocation().getItems().remove(noun);
                                         System.out.println("Player inventory: " + player.getInventory());
                                         System.out.println("Items in location: " + gamestate.getPlayerLocation().getItems());
                                 } else {
