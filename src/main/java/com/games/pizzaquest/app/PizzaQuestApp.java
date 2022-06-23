@@ -205,11 +205,11 @@ public class PizzaQuestApp {
                                 break;
                         case "give":
                                 //removes item from inventory
-                                if (!player.getInventory().contains(noun)){
+                                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
                                         break;
                                 }
                                 if(gamestate.getPlayerLocation().npc!=null){
-                                       reputation = gamestate.getPlayerLocation().npc.processItem(noun);
+                                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
                                 }
                                 player.removeFromInventory(noun);
                                 break;
