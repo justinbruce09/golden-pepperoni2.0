@@ -1,5 +1,7 @@
 package com.games.pizzaquest.objects;
 
+import com.games.pizzaquest.util.PizzaPrinter;
+
 public class GameText {
     private String command;
     private String option;
@@ -32,7 +34,7 @@ public class GameText {
 
     public void printHelp() {
         String help = "\"" + command +  translateOption() + "\" " + description + ".";
-        System.out.println(help);
+        PizzaPrinter.SOUT.println(help);
 
 
     }
