@@ -3,7 +3,15 @@ package com.games.pizzaquest.util;
 import javax.swing.*;
 
 public enum PizzaPrinter {
-    SOUT(null), LOCATION_TEXT_BOX(new JLabel()), INVENTORY(new JLabel()), QUEST_LOG(new JLabel());
+    SOUT(null),
+    INVENTORY(new JLabel()),
+    QUEST_LOG(new JLabel()),
+    LOCATION(new JLabel()),
+    WELCOME(new JLabel()),
+    RESULT(new JLabel()),
+    TURN(new JLabel()),
+    REPUTATION(new JLabel()),
+    HELP(new JLabel());
 
     private JLabel target;
     private boolean newLine = true;
