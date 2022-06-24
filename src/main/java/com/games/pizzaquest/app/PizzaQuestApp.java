@@ -23,6 +23,15 @@ public class PizzaQuestApp {
         private static final String locationFilePath = "gamemap.json";
         private static final String textFilePath = "instructions.json";
         private static final String itemFilePath = "items.json";
+        private static final PizzaPrinter inventoryPrinter = PizzaPrinter.SOUT;
+        private static final PizzaPrinter questPrinter = PizzaPrinter.SOUT;
+        private static final PizzaPrinter locationPrinter = PizzaPrinter.SOUT;
+        private static final PizzaPrinter welcomePrinter = PizzaPrinter.SOUT;
+        public static final PizzaPrinter resultPrinter = PizzaPrinter.SOUT;
+        private static final PizzaPrinter turnPrinter = PizzaPrinter.SOUT;
+        private static final PizzaPrinter reputationPrinter = PizzaPrinter.SOUT;
+        public static final PizzaPrinter helpPrinter = PizzaPrinter.SOUT;
+
 
         //track turn may be moved to player
         private int turns = 0;
@@ -67,7 +76,7 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-                PizzaPrinter.SOUT.println(enterName());
+                welcomePrinter.println(enterName());
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
@@ -77,9 +86,9 @@ public class PizzaQuestApp {
                         // Increment turns by 1
                         //Display player status including number of turns left
                         int turnsLeft = END_OF_TURNS - turns;
-                        PizzaPrinter.SOUT.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                        turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
                         //Players reputation is displayed whenever status is updated
-                        PizzaPrinter.SOUT.println("Your reputation is " + reputation);
+                        reputationPrinter.println("Your reputation is " + reputation);
 
                 }
                 quitGame();
@@ -88,7 +97,7 @@ public class PizzaQuestApp {
 
         private void checkIfGameIsWon() {
                 if(reputation >=WINNING_REPUTATION){
-                        PizzaPrinter.SOUT.println("You win");
+                        resultPrinter.println("You win");
                         quitGame();
                 }
         }
@@ -102,7 +111,7 @@ public class PizzaQuestApp {
                         while ((c = reader.read()) != -1) {
                                 textBuilder.append((char) c);
                         }
-                        PizzaPrinter.SOUT.println(textBuilder.toString());
+                        welcomePrinter.print(textBuilder + "\n");
                 } catch (IOException e) {
                         e.printStackTrace();
                 }
@@ -114,13 +123,13 @@ public class PizzaQuestApp {
         }
 
         private String enterName() {
-                PizzaPrinter.SOUT.println("Please enter your name: ");
+                welcomePrinter.println("Please enter your name: ");
                 String playerName = scanner.nextLine();
                 return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
         private void quitGame() {
-                PizzaPrinter.SOUT.println("You'll always have a pizza our heart ... Goodbye!");
+                welcomePrinter.println("You'll always have a pizza our heart ... Goodbye!");
                 setGameOver(true);
                 System.exit(0);
         }
@@ -155,21 +164,21 @@ public class PizzaQuestApp {
                                 break;
                         case "go":
                                 if (noun.equals("") || !validDirections.contains(noun)){
-                                        PizzaPrinter.SOUT.println("There is nothing that way!");
+                                        resultPrinter.print("There is nothing that way!\n");
                                         break;
                                 }
                                 String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
-                                PizzaPrinter.SOUT.println();
+                                locationPrinter.print("\n");
                                 if(!nextLoc.equals("nothing")){
-                                        PizzaPrinter.SOUT.println(nextLoc);
+                                        locationPrinter.println(nextLoc + "\n");
                                         gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
-                                        PizzaPrinter.SOUT.println();
-                                        PizzaPrinter.SOUT.println(player.look(gamestate.getPlayerLocation()));
-                                        PizzaPrinter.SOUT.println();
+                                        locationPrinter.print("\n");
+                                        locationPrinter.print(player.look(gamestate.getPlayerLocation()) + "\n");
+                                        locationPrinter.println("\n");
                                         turns++;
                                 }
                                 else{
-                                        PizzaPrinter.SOUT.println("There is nothing that way!");
+                                        resultPrinter.println("There is nothing that way!");
                                 }
                                 break;
                         case "look":
@@ -181,22 +190,22 @@ public class PizzaQuestApp {
                                         break;
                                 }
                                 if(itemList.contains(noun)){
-                                        PizzaPrinter.SOUT.println(player.look(new Item(noun)));
+                                        resultPrinter.println(player.look(new Item(noun)));
                                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
-                                        PizzaPrinter.SOUT.println(gamestate.getPlayerLocation().npc.getNpcDescription());
+                                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
                         }
                                 else{
-                                        PizzaPrinter.SOUT.println(player.look(gamestate.getPlayerLocation()));
+                                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
                                 }
                                 break;
                         case "take":
                                 if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
                                         //add item to inventory
                                         player.addToInventory(noun);
-                                        PizzaPrinter.SOUT.println("Player inventory: " + player.getInventory());
-                                        PizzaPrinter.SOUT.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                                        printInventory();
+                                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
                                 } else {
-                                        PizzaPrinter.SOUT.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
+                                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
                                 }
                                 break;
                         case "talk":
@@ -214,11 +223,7 @@ public class PizzaQuestApp {
                                 player.removeFromInventory(noun);
                                 break;
                         case "inventory":
-                                Set<Item> tempInventory = player.getInventory();
-                                PizzaPrinter.SOUT.println("Items in the Inventory");
-                                for (Item item : tempInventory) {
-                                        PizzaPrinter.SOUT.println(item.getName());
-                                }
+                                printInventory();
                                 break;
                         case "help":
                                 gameInstructions();
@@ -227,18 +232,27 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                PizzaPrinter.SOUT.println("I don't understand " + verbAndNounList);
-                                PizzaPrinter.SOUT.println("Type help if you need some guidance on command structure!");
+                                resultPrinter.println("I don't understand " + verbAndNounList);
+                                resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
+        }
+
+        private void printInventory() {
+                Set<Item> tempInventory = player.getInventory();
+                inventoryPrinter.print("Items in the Inventory\n");
+                for (Item item : tempInventory) {
+                        inventoryPrinter.print(item.getName() + "\n");
+                }
+                inventoryPrinter.println();
         }
 
         private void talk(String noun) {
                 Location playerLocation = gamestate.getPlayerLocation();
                 if(playerLocation.npc != null && playerLocation.npc.getName().equals(noun)){
-                        PizzaPrinter.SOUT.print(playerLocation.npc.giveQuest() + "\n");
+                        questPrinter.print(playerLocation.npc.giveQuest() + "\n");
                 }else{
-                        PizzaPrinter.SOUT.println("That player many not be in in this room or even exist!");
+                        resultPrinter.println("That player many not be in in this room or even exist!");
                 }
         }
 

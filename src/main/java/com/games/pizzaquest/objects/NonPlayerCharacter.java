@@ -1,5 +1,6 @@
 package com.games.pizzaquest.objects;
 
+import com.games.pizzaquest.app.PizzaQuestApp;
 import com.games.pizzaquest.util.PizzaPrinter;
 
 import java.util.HashMap;
@@ -40,9 +41,9 @@ public class NonPlayerCharacter implements PlayerInterface{
   int sendRep= - getRepToGive();
   if(item.equals(getRequiredQuestItemString())){
    sendRep=getRepToGive();
-   PizzaPrinter.SOUT.println("Congratulations you have received " + sendRep+ " reputation from "+ getName());
+   PizzaQuestApp.resultPrinter.println("Congratulations you have received " + sendRep+ " reputation from "+ getName());
   }else{
-   PizzaPrinter.SOUT.println("You gave the "+ item + " to " + getName()+". Unfortunately he took that item but it not what they were looking for :(" );
+   PizzaQuestApp.resultPrinter.println("You gave the "+ item + " to " + getName()+". Unfortunately he took that item but it not what they were looking for :(" );
   }
   return sendRep;
  }

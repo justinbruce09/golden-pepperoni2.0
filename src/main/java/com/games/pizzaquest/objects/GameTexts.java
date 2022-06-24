@@ -1,6 +1,6 @@
 package com.games.pizzaquest.objects;
 
-import com.games.pizzaquest.util.PizzaPrinter;
+import com.games.pizzaquest.app.PizzaQuestApp;
 
 import java.util.ArrayList;
 
@@ -17,11 +17,10 @@ public class GameTexts {
 
     // Create a method that will print all the GameText in the ArrayList
     public void displayCommands() {
-        PizzaPrinter.SOUT.println("You must use the following commands to navigate: ");
-        PizzaPrinter.SOUT.println();
+        PizzaQuestApp.helpPrinter.print("You must use the following commands to navigate: \n\n");
         for (GameText gt: texts) {
            gt.printHelp();
-            PizzaPrinter.SOUT.println();
+            PizzaQuestApp.helpPrinter.print("\n");
         }
     }
 }
