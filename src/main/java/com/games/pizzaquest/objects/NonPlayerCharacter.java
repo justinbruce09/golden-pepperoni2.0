@@ -37,7 +37,7 @@ public class NonPlayerCharacter implements PlayerInterface{
  }
 
  public int processItem(String item){
-  int sendRep=0;
+  int sendRep= - getRepToGive();
   if(item.equals(getRequiredQuestItemString())){
    sendRep=getRepToGive();
    PizzaPrinter.SOUT.println("Congratulations you have received " + sendRep+ " reputation from "+ getName());
