@@ -186,17 +186,7 @@ public class PizzaQuestApp {
                                 //will need a item list and a location list
                                 //todo - check size and get last
                                 //if room, do the first, else if item, do the second
-                                if (noun.equals("")){
-                                        break;
-                                }
-                                if(itemList.contains(noun)){
-                                        resultPrinter.println(player.look(new Item(noun)));
-                                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
-                                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
-                        }
-                                else{
-                                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
-                                }
+                                look(noun);
                                 break;
                         case "take":
                                 if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
@@ -236,6 +226,21 @@ public class PizzaQuestApp {
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
+        }
+
+        private void look(String noun) {
+                if (noun.equals("")){
+                        return;
+                }
+                if(itemList.contains(noun)){
+                        resultPrinter.println(player.look(new Item(noun)));
+                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
+                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
+        }
+                else{
+                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
+                }
+                return;
         }
 
         private void printInventory() {
