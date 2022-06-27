@@ -163,23 +163,7 @@ public class PizzaQuestApp {
                                 quitGame();
                                 break;
                         case "go":
-                                if (noun.equals("") || !validDirections.contains(noun)){
-                                        resultPrinter.print("There is nothing that way!\n");
-                                        break;
-                                }
-                                String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
-                                locationPrinter.print("\n");
-                                if(!nextLoc.equals("nothing")){
-                                        locationPrinter.println(nextLoc + "\n");
-                                        gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
-                                        locationPrinter.print("\n");
-                                        locationPrinter.print(player.look(gamestate.getPlayerLocation()) + "\n");
-                                        locationPrinter.println("\n");
-                                        turns++;
-                                }
-                                else{
-                                        resultPrinter.println("There is nothing that way!");
-                                }
+                                travel(noun, validDirections);
                                 break;
                         case "look":
                                 //look(); //player location or item  description printed
@@ -235,6 +219,26 @@ public class PizzaQuestApp {
                                 resultPrinter.println("I don't understand " + verbAndNounList);
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
+                }
+        }
+
+        private void travel(String noun, ArrayList<String> validDirections) {
+                if (noun.equals("") || !validDirections.contains(noun)){
+                        resultPrinter.print("There is nothing that way!\n");
+                        return;
+                }
+                String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
+                locationPrinter.print("\n");
+                if(!nextLoc.equals("nothing")){
+                        locationPrinter.println(nextLoc + "\n");
+                        gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
+                        locationPrinter.print("\n");
+                        locationPrinter.print(player.look(gamestate.getPlayerLocation()) + "\n");
+                        locationPrinter.println("\n");
+                        turns++;
+                }
+                else{
+                        resultPrinter.println("There is nothing that way!");
                 }
         }
 
