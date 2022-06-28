@@ -1,16 +1,19 @@
 [
-    {"name":  "lemon", "type": "npc", "room": "rome"},
-    {"name":  "moped", "type":  "vehicle", "room":  "cathedral"},
-    {"name":  "espresso", "type":  "npc", "room":  "trevi"},
-    {"name":  "coin", "type":  "npc", "room":  "trevi"},
-    {"name":  "horse", "type":  "vehicle", "room":  "tower"},
-    {"name":  "coin", "type":  "npc", "room":  "canals"},
-    {"name":  "cannoli", "type":  "npc", "room":  "pompeii"},
-    {"name":  "cookbook", "type":  "npc", "room":  "pompeii"},
-    {"name":  "wine_glass", "type":  "npc", "room":  "naples"},
-    {"name":  "olive_oil", "type":  "npc", "room":  "naples"},
-    {"name":  "pizza_cutter", "type":  "npc", "room":  "naples"},
-    {"name":  "marble_sculpture", "type":  "static", "room":  "amalfi"}
+    {"name":  "lemon", "type": "npc", "room": "rome", "description": "ripe and juicy. This would be great in a pasta."
+    },
+    {"name":  "moped", "type":  "vehicle", "room":  "cathedral", "description" :  "A traditional Vespa, this may help me get around a bit faster."},
+    {"name":  "espresso", "type":  "npc", "room":  "trevi",
+        "description":"Classic italian espresso. Full bodied and aromatic. I could probably use this as a pick-me-up or to cook with."
+    },
+    {"name":  "coin", "type":  "npc", "room":  "trevi", "description": "an old Greek Drachma, I wonder if I can still use this as currency?"},
+    {"name":  "horse", "type":  "vehicle", "room":  "tower", "description": "A Murgese horse. This horse is typically used for cross-country travel."},
+    {"name":  "coin", "type":  "npc", "room":  "canals", "description": "A Euro. Hmmmm, I wonder what I can purchase with this."},
+    {"name":  "cannoli", "type":  "npc", "room":  "pompeii","description": "A cannoli Siciliani. A delicious fried pastry filled with a ricotta cheese mixture"},
+    {"name":  "cookbook", "type":  "npc", "room":  "pompeii", "description": "A timeworn cookbook that appears to have been passed down through the generations. It's full of traditional recipes. Maybe this will finally teach me how to cook."},
+    {"name":  "wine_glass", "type":  "npc", "room":  "naples", "description": "a Bordeaux glass, perfect for full-bodied red wines from the area."},
+    {"name":  "olive_oil", "type":  "npc", "room":  "naples", "description": "A gorgeous golden color. It looks fresh-pressed. One of the most versatile items in the cooking arsenal.\n Olive oil is known for its amazing health benefits. "},
+    {"name":  "pizza_cutter", "type":  "npc", "room":  "naples", "description": "looks like a standard pizza cutter. I think this will work in my kitchen."},
+    {"name":  "marble_sculpture", "type":  "static", "room":  "amalfi", "description": "a beautiful marble sculpture depicting a family by the sea shore."}
     ]
 
 
