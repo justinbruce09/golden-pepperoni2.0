@@ -173,28 +173,14 @@ public class PizzaQuestApp {
                                 look(noun);
                                 break;
                         case "take":
-                                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
-                                        //add item to inventory
-                                        player.addToInventory(noun);
-                                        printInventory();
-                                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
-                                } else {
-                                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
-                                }
+                                takeItem(noun);
                                 break;
                         case "talk":
                                 //talk to NPC to inventory
                                 talk(noun);
                                 break;
                         case "give":
-                                //removes item from inventory
-                                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
-                                        break;
-                                }
-                                if(gamestate.getPlayerLocation().npc!=null){
-                                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
-                                }
-                                player.removeFromInventory(noun);
+                                giveItem(noun);
                                 break;
                         case "inventory":
                                 printInventory();
@@ -209,6 +195,28 @@ public class PizzaQuestApp {
                                 resultPrinter.println("I don't understand " + verbAndNounList);
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
+                }
+        }
+
+        private void giveItem(String noun) {
+                //removes item from inventory
+                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
+                        return;
+                }
+                if(gamestate.getPlayerLocation().npc!=null){
+                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
+                }
+                player.removeFromInventory(noun);
+        }
+
+        private void takeItem(String noun) {
+                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
+                        //add item to inventory
+                        player.addToInventory(noun);
+                        printInventory();
+                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                } else {
+                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
                 }
         }
 
