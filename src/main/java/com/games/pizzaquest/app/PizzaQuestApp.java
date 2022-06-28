@@ -60,9 +60,10 @@ public class PizzaQuestApp {
         private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
         private List<Item> itemsList;
+        private TextParser parser;
 
         public void execute() {
-                TextParser parser = new TextParser();
+                parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
                 //temporarily put in a 1 iteration loop to test user input
@@ -80,18 +81,21 @@ public class PizzaQuestApp {
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
-
-                        processCommands(parser.parse(scanner.nextLine()));
-                        checkIfGameIsWon();
-                        // Increment turns by 1
-                        //Display player status including number of turns left
-                        int turnsLeft = END_OF_TURNS - turns;
-                        turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
-                        //Players reputation is displayed whenever status is updated
-                        reputationPrinter.println("Your reputation is " + reputation);
+                        turnLogic(scanner.nextLine());
 
                 }
                 quitGame();
+        }
+
+        public void turnLogic(String input) {
+                processCommands(parser.parse(input));
+                checkIfGameIsWon();
+                // Increment turns by 1
+                //Display player status including number of turns left
+                int turnsLeft = END_OF_TURNS - turns;
+                turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                //Players reputation is displayed whenever status is updated
+                reputationPrinter.println("Your reputation is " + reputation);
         }
 
 
@@ -170,41 +174,17 @@ public class PizzaQuestApp {
                                 //will need a item list and a location list
                                 //todo - check size and get last
                                 //if room, do the first, else if item, do the second
-                                if (noun.equals("")){
-                                        break;
-                                }
-                                if(itemList.contains(noun)){
-                                        resultPrinter.println(player.look(new Item(noun)));
-                                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
-                                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
-                        }
-                                else{
-                                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
-                                }
+                                look(noun);
                                 break;
                         case "take":
-                                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
-                                        //add item to inventory
-                                        player.addToInventory(noun);
-                                        printInventory();
-                                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
-                                } else {
-                                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
-                                }
+                                takeItem(noun);
                                 break;
                         case "talk":
                                 //talk to NPC to inventory
                                 talk(noun);
                                 break;
                         case "give":
-                                //removes item from inventory
-                                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
-                                        break;
-                                }
-                                if(gamestate.getPlayerLocation().npc!=null){
-                                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
-                                }
-                                player.removeFromInventory(noun);
+                                giveItem(noun);
                                 break;
                         case "inventory":
                                 printInventory();
@@ -216,10 +196,47 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                resultPrinter.println("I don't understand " + verbAndNounList);
+                                resultPrinter.print("I don't understand " + verbAndNounList + "\n");
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
+        }
+
+        private void giveItem(String noun) {
+                //removes item from inventory
+                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
+                        return;
+                }
+                if(gamestate.getPlayerLocation().npc!=null){
+                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
+                }
+                player.removeFromInventory(noun);
+        }
+
+        private void takeItem(String noun) {
+                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
+                        //add item to inventory
+                        player.addToInventory(noun);
+                        printInventory();
+                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                } else {
+                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
+                }
+        }
+
+        private void look(String noun) {
+                if (noun.equals("")){
+                        return;
+                }
+                if(itemList.contains(noun)){
+                        resultPrinter.println(player.look(new Item(noun)));
+                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
+                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
+        }
+                else{
+                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
+                }
+                return;
         }
 
         private void travel(String noun, ArrayList<String> validDirections) {
