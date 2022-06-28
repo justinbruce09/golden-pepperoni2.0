@@ -60,9 +60,10 @@ public class PizzaQuestApp {
         private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
         private List<Item> itemsList;
+        private TextParser parser;
 
         public void execute() {
-                TextParser parser = new TextParser();
+                parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
                 //temporarily put in a 1 iteration loop to test user input
@@ -80,18 +81,21 @@ public class PizzaQuestApp {
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
-
-                        processCommands(parser.parse(scanner.nextLine()));
-                        checkIfGameIsWon();
-                        // Increment turns by 1
-                        //Display player status including number of turns left
-                        int turnsLeft = END_OF_TURNS - turns;
-                        turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
-                        //Players reputation is displayed whenever status is updated
-                        reputationPrinter.println("Your reputation is " + reputation);
+                        turnLogic(scanner.nextLine());
 
                 }
                 quitGame();
+        }
+
+        public void turnLogic(String input) {
+                processCommands(parser.parse(input));
+                checkIfGameIsWon();
+                // Increment turns by 1
+                //Display player status including number of turns left
+                int turnsLeft = END_OF_TURNS - turns;
+                turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                //Players reputation is displayed whenever status is updated
+                reputationPrinter.println("Your reputation is " + reputation);
         }
 
 
@@ -192,7 +196,7 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                resultPrinter.println("I don't understand " + verbAndNounList);
+                                resultPrinter.print("I don't understand " + verbAndNounList + "\n");
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
