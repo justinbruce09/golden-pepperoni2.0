@@ -14,6 +14,10 @@ import java.util.*;
 
 public class PizzaQuestApp {
 
+        public static void setScanner(Scanner scanner) {
+                PizzaQuestApp.scanner = scanner;
+        }
+
         //scanner for the game
         static Scanner scanner = new Scanner(System.in);
         //text parser for users to use
@@ -60,9 +64,22 @@ public class PizzaQuestApp {
         private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
         private List<Item> itemsList;
+        private TextParser parser;
 
         public void execute() {
-                TextParser parser = new TextParser();
+                initilize();
+                welcomePrinter.println(enterName());
+                while(turns < END_OF_TURNS) {
+                        //send user input to parser to validate and return a List
+                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
+                        turnLogic(scanner.nextLine());
+
+                }
+                quitGame();
+        }
+
+        public void initilize() {
+                parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
                 //temporarily put in a 1 iteration loop to test user input
@@ -76,22 +93,17 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-                welcomePrinter.println(enterName());
-                while(turns < END_OF_TURNS) {
-                        //send user input to parser to validate and return a List
-                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
+        }
 
-                        processCommands(parser.parse(scanner.nextLine()));
-                        checkIfGameIsWon();
-                        // Increment turns by 1
-                        //Display player status including number of turns left
-                        int turnsLeft = END_OF_TURNS - turns;
-                        turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
-                        //Players reputation is displayed whenever status is updated
-                        reputationPrinter.println("Your reputation is " + reputation);
-
-                }
-                quitGame();
+        public void turnLogic(String input) {
+                processCommands(parser.parse(input));
+                checkIfGameIsWon();
+                // Increment turns by 1
+                //Display player status including number of turns left
+                int turnsLeft = END_OF_TURNS - turns;
+                turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                //Players reputation is displayed whenever status is updated
+                reputationPrinter.println("Your reputation is " + reputation);
         }
 
 
@@ -192,7 +204,7 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                resultPrinter.println("I don't understand " + verbAndNounList);
+                                resultPrinter.print("I don't understand " + verbAndNounList + "\n");
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
                 }
