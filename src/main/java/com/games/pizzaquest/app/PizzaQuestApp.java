@@ -14,6 +14,10 @@ import java.util.*;
 
 public class PizzaQuestApp {
 
+        public static void setScanner(Scanner scanner) {
+                PizzaQuestApp.scanner = scanner;
+        }
+
         //scanner for the game
         static Scanner scanner = new Scanner(System.in);
         //text parser for users to use
@@ -63,6 +67,18 @@ public class PizzaQuestApp {
         private TextParser parser;
 
         public void execute() {
+                initilize();
+                welcomePrinter.println(enterName());
+                while(turns < END_OF_TURNS) {
+                        //send user input to parser to validate and return a List
+                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
+                        turnLogic(scanner.nextLine());
+
+                }
+                quitGame();
+        }
+
+        public void initilize() {
                 parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
@@ -77,14 +93,6 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-                welcomePrinter.println(enterName());
-                while(turns < END_OF_TURNS) {
-                        //send user input to parser to validate and return a List
-                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
-                        turnLogic(scanner.nextLine());
-
-                }
-                quitGame();
         }
 
         public void turnLogic(String input) {
