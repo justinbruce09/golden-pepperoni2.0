@@ -234,10 +234,11 @@ public class PizzaQuestApp {
         }
 
         private void look(String noun) {
+
                 if (noun.equals("")){
                         return;
                 }
-                if(itemList.contains(noun)){
+                if(itemsList.contains(noun)){
                         resultPrinter.println(player.look(new Item(noun)));
                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
                         resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
