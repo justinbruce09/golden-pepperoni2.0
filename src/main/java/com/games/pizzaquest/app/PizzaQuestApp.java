@@ -11,6 +11,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PizzaQuestApp {
 
@@ -238,11 +239,13 @@ public class PizzaQuestApp {
                 if (noun.equals("")){
                         return;
                 }
-                if(itemsList.contains(noun)){
-                        resultPrinter.println(player.look(new Item(noun)));
+                List<Item> filteredItems = itemsList.stream().filter(item -> item.getName().equals(noun))
+                        .collect(Collectors.toList());
+                if(!filteredItems.isEmpty()){
+                        resultPrinter.println(filteredItems.get(0).getDescription());
                 }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
                         resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
-        }
+                }
                 else{
                         resultPrinter.println(player.look(gamestate.getPlayerLocation()));
                 }
