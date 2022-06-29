@@ -11,8 +11,13 @@ import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PizzaQuestApp {
+
+        public static void setScanner(Scanner scanner) {
+                PizzaQuestApp.scanner = scanner;
+        }
 
         //scanner for the game
         static Scanner scanner = new Scanner(System.in);
@@ -60,9 +65,22 @@ public class PizzaQuestApp {
         private Type itemListType = new TypeToken<List<Item>>(){}.getType();
 
         private List<Item> itemsList;
+        private TextParser parser;
 
         public void execute() {
-                TextParser parser = new TextParser();
+                initialize();
+                welcomePrinter.println(enterName(scanner.nextLine()));
+                while(turns < END_OF_TURNS) {
+                        //send user input to parser to validate and return a List
+                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
+                        turnLogic(scanner.nextLine());
+
+                }
+                quitGame();
+        }
+
+        public void initialize() {
+                parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
                 //temporarily put in a 1 iteration loop to test user input
@@ -76,22 +94,19 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
-                welcomePrinter.println(enterName());
-                while(turns < END_OF_TURNS) {
-                        //send user input to parser to validate and return a List
-                        //then runs logic in relation to the map, and list based on Noun Verb Relationship
+                welcomePrinter.println("Please enter your name: ");
 
-                        processCommands(parser.parse(scanner.nextLine()));
-                        checkIfGameIsWon();
-                        // Increment turns by 1
-                        //Display player status including number of turns left
-                        int turnsLeft = END_OF_TURNS - turns;
-                        turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
-                        //Players reputation is displayed whenever status is updated
-                        reputationPrinter.println("Your reputation is " + reputation);
+        }
 
-                }
-                quitGame();
+        public void turnLogic(String input) {
+                processCommands(parser.parse(input));
+                checkIfGameIsWon();
+                // Increment turns by 1
+                //Display player status including number of turns left
+                int turnsLeft = END_OF_TURNS - turns;
+                turnPrinter.println("It's day " + turns + ". You have " + turnsLeft + " days left." );
+                //Players reputation is displayed whenever status is updated
+                reputationPrinter.println("Your reputation is " + reputation);
         }
 
 
@@ -122,9 +137,8 @@ public class PizzaQuestApp {
 
         }
 
-        private String enterName() {
-                welcomePrinter.println("Please enter your name: ");
-                String playerName = scanner.nextLine();
+        public String enterName(String nameInput) {
+                String playerName = nameInput;
                 return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
@@ -163,64 +177,24 @@ public class PizzaQuestApp {
                                 quitGame();
                                 break;
                         case "go":
-                                if (noun.equals("") || !validDirections.contains(noun)){
-                                        resultPrinter.print("There is nothing that way!\n");
-                                        break;
-                                }
-                                String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
-                                locationPrinter.print("\n");
-                                if(!nextLoc.equals("nothing")){
-                                        locationPrinter.println(nextLoc + "\n");
-                                        gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
-                                        locationPrinter.print("\n");
-                                        locationPrinter.print(player.look(gamestate.getPlayerLocation()) + "\n");
-                                        locationPrinter.println("\n");
-                                        turns++;
-                                }
-                                else{
-                                        resultPrinter.println("There is nothing that way!");
-                                }
+                                travel(noun, validDirections);
                                 break;
                         case "look":
                                 //look(); //player location or item  description printed
                                 //will need a item list and a location list
                                 //todo - check size and get last
                                 //if room, do the first, else if item, do the second
-                                if (noun.equals("")){
-                                        break;
-                                }
-                                if(itemList.contains(noun)){
-                                        resultPrinter.println(player.look(new Item(noun)));
-                                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
-                                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
-                        }
-                                else{
-                                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
-                                }
+                                look(noun);
                                 break;
                         case "take":
-                                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
-                                        //add item to inventory
-                                        player.addToInventory(noun);
-                                        printInventory();
-                                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
-                                } else {
-                                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
-                                }
+                                takeItem(noun);
                                 break;
                         case "talk":
                                 //talk to NPC to inventory
                                 talk(noun);
                                 break;
                         case "give":
-                                //removes item from inventory
-                                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
-                                        break;
-                                }
-                                if(gamestate.getPlayerLocation().npc!=null){
-                                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
-                                }
-                                player.removeFromInventory(noun);
+                                giveItem(noun);
                                 break;
                         case "inventory":
                                 printInventory();
@@ -232,9 +206,69 @@ public class PizzaQuestApp {
                                 resetGame();
                                 break;
                         default:
-                                resultPrinter.println("I don't understand " + verbAndNounList);
+                                resultPrinter.print("I don't understand " + verbAndNounList + "\n");
                                 resultPrinter.println("Type help if you need some guidance on command structure!");
                                 break;
+                }
+        }
+
+        private void giveItem(String noun) {
+                //removes item from inventory
+                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
+                        return;
+                }
+                if(gamestate.getPlayerLocation().npc!=null){
+                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
+                }
+                player.removeFromInventory(noun);
+        }
+
+        private void takeItem(String noun) {
+                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
+                        //add item to inventory
+                        player.addToInventory(noun);
+                        printInventory();
+                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                } else {
+                        resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
+                }
+        }
+
+        private void look(String noun) {
+
+                if (noun.equals("")){
+                        return;
+                }
+                List<Item> filteredItems = itemsList.stream().filter(item -> item.getName().equals(noun))
+                        .collect(Collectors.toList());
+                if(!filteredItems.isEmpty()){
+                        resultPrinter.println(filteredItems.get(0).getDescription());
+                }else if (gamestate.getPlayerLocation().npc!= null && gamestate.getPlayerLocation().npc.getName().equals(noun)){
+                        resultPrinter.println(gamestate.getPlayerLocation().npc.getNpcDescription());
+                }
+                else{
+                        resultPrinter.println(player.look(gamestate.getPlayerLocation()));
+                }
+                return;
+        }
+
+        private void travel(String noun, ArrayList<String> validDirections) {
+                if (noun.equals("") || !validDirections.contains(noun)){
+                        resultPrinter.print("There is nothing that way!\n");
+                        return;
+                }
+                String nextLoc = gamestate.getPlayerLocation().getNextLocation(noun);
+                locationPrinter.print("\n");
+                if(!nextLoc.equals("nothing")){
+                        locationPrinter.println(nextLoc + "\n");
+                        gamestate.setPlayerLocation(gameMap.get(nextLoc.toLowerCase()));
+                        locationPrinter.print("\n");
+                        locationPrinter.print(player.look(gamestate.getPlayerLocation()) + "\n");
+                        locationPrinter.println("\n");
+                        turns++;
+                }
+                else{
+                        resultPrinter.println("There is nothing that way!");
                 }
         }
 
