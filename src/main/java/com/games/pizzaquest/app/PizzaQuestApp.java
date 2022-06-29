@@ -67,8 +67,8 @@ public class PizzaQuestApp {
         private TextParser parser;
 
         public void execute() {
-                initilize();
-                welcomePrinter.println(enterName());
+                initialize();
+                welcomePrinter.println(enterName(scanner.nextLine()));
                 while(turns < END_OF_TURNS) {
                         //send user input to parser to validate and return a List
                         //then runs logic in relation to the map, and list based on Noun Verb Relationship
@@ -78,7 +78,7 @@ public class PizzaQuestApp {
                 quitGame();
         }
 
-        public void initilize() {
+        public void initialize() {
                 parser = new TextParser();
                 setGameOver(false);
                 //temporary setting of description for npc
@@ -93,6 +93,8 @@ public class PizzaQuestApp {
                 addItemsToLocationMap(gameMap, itemsList);
                 welcome();
                 gamestate = new Gamestate(gameMap.get("naples"));
+                welcomePrinter.println("Please enter your name: ");
+
         }
 
         public void turnLogic(String input) {
@@ -134,9 +136,8 @@ public class PizzaQuestApp {
 
         }
 
-        private String enterName() {
-                welcomePrinter.println("Please enter your name: ");
-                String playerName = scanner.nextLine();
+        public String enterName(String nameInput) {
+                String playerName = nameInput;
                 return ("Ciao " + playerName+ " you are in " + gamestate.getPlayerLocation());
         }
 
