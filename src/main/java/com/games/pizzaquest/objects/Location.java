@@ -35,7 +35,7 @@ public class Location {
         return west;
     }
 
-    public Location (String name, String north, String south, String east, String west ){
+    public Location(String name, String north, String south, String east, String west) {
         this.name = name;
         this.north = north;
         this.south = south;
@@ -43,7 +43,7 @@ public class Location {
         this.west = west;
     }
 
-    public Location (String name, NonPlayerCharacter NPC,String north, String south, String east, String west ){
+    public Location(String name, NonPlayerCharacter NPC, String north, String south, String east, String west) {
         this.name = name;
         this.north = north;
         this.south = south;
@@ -52,9 +52,9 @@ public class Location {
         this.npc = NPC;
     }
 
-    public String getNextLocation(String direction){
+    public String getNextLocation(String direction) {
         String nextLoc = null;
-        switch (direction.toLowerCase()){
+        switch (direction.toLowerCase()) {
             case "north":
                 nextLoc = getNorth();
                 break;
@@ -73,15 +73,15 @@ public class Location {
         return nextLoc;
     }
 
-    private String printBoarders(){
-        return "\nTo the north we have " + getNorth() + ",\nTo the east we have " + getEast()+
-                ",\nTo the south we have " + getSouth() + ",\nTo the west we have " + getWest()+".";
+    private String printBoarders() {
+        return "\nTo the north we have " + getNorth() + ",\nTo the east we have " + getEast() +
+                ",\nTo the south we have " + getSouth() + ",\nTo the west we have " + getWest() + ".";
     }
 
-    private StringBuilder printItems(){
+    private StringBuilder printItems() {
         StringBuilder showItems = new StringBuilder();
-        if ( items != null) {
-            for (Item item : getItems()){
+        if (items != null) {
+            for (Item item : getItems()) {
                 showItems.append("I see a " + item.getName() + ".\n");
             }
         }
@@ -91,15 +91,16 @@ public class Location {
     public String getName() {
         return name;
     }
-    public void setNpc(NonPlayerCharacter npc){
+
+    public void setNpc(NonPlayerCharacter npc) {
         this.npc = npc;
     }
 
 
     @Override
-    public String toString(){
-        return "You are in the " + getName() + "." + printBoarders() +"\n" + printItems() +
-                (npc != null?npc.getName()+" is standing in the room": "there is no one in the room");
+    public String toString() {
+        return "You are in the " + getName() + "." + printBoarders() + "\n" + printItems() +
+                (npc != null ? npc.getName() + " is standing in the room" : "there is no one in the room");
     }
 
 

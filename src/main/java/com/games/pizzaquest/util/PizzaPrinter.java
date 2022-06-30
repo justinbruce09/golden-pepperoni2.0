@@ -16,18 +16,18 @@ public enum PizzaPrinter {
     private JLabel target;
     private boolean newLine = true;
 
-    JLabel getTarget(){
+    JLabel getTarget() {
         return target;
     }
 
-    void setTargetLocationAndSize(int x, int y, int height, int width){
-        if(target != null) {
+    void setTargetLocationAndSize(int x, int y, int height, int width) {
+        if (target != null) {
             target.setLocation(x, y);
             target.setSize(width, height);
         }
     }
 
-    PizzaPrinter(JLabel target){
+    PizzaPrinter(JLabel target) {
         this.target = target;
     }
 
@@ -35,7 +35,7 @@ public enum PizzaPrinter {
         println("");
     }
 
-    public void println(String text){
+    public void println(String text) {
         if (target == null) {
             System.out.println(text);
         } else {
@@ -49,7 +49,7 @@ public enum PizzaPrinter {
     }
 
 
-    public void print(String text){
+    public void print(String text) {
         if (target == null) {
             System.out.print(text);
         } else {
