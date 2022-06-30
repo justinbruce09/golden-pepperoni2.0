@@ -17,8 +17,8 @@ public class Player {
         inventory.add(new Item(itemName));
     }
 
-    public void removeFromInventory(String itemName){
-        inventory.removeIf(item -> item.getName().equals(itemName));
+    public boolean removeFromInventoryIf(String itemName){
+        return inventory.removeIf(item -> item.getName().equals(itemName));
     }
 
     public <T> String look(T thingToLookAt){

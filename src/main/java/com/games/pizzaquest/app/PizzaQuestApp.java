@@ -194,7 +194,7 @@ public class PizzaQuestApp {
                                 talk(noun);
                                 break;
                         case "give":
-                                giveItem(noun);
+                                giveItemToNpc(noun);
                                 break;
                         case "inventory":
                                 printInventory();
@@ -212,23 +212,42 @@ public class PizzaQuestApp {
                 }
         }
 
-        private void giveItem(String noun) {
+        private void giveItemToNpc(String noun) {
+                boolean inInventory = false;
+                Set<Item> inventory = player.getInventory();
+                for (Item item : inventory){
+                        if (item.getName().equals(noun)){
+                                inInventory = true;
+                                inventory.remove(item);
+                                break;
+                        }
+                }
+
                 //removes item from inventory
-                if (!player.getInventory().removeIf(item -> item.getName().equals(noun))){
-                        return;
+                if (gamestate.getPlayerLocation().npc != null && inInventory){
+                        //Look into a getIndex or similar method.
+                        reputation += gamestate.getPlayerLocation().npc.processItem(noun);
                 }
-                if(gamestate.getPlayerLocation().npc!=null){
-                       reputation += gamestate.getPlayerLocation().npc.processItem(noun);
-                }
-                player.removeFromInventory(noun);
         }
 
+        //mock gamestate, location.items, player.inventory
+        //programmer.tryNotToCry();
+        //programmer.cryALot();
         private void takeItem(String noun) {
-                if(gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals(noun))) {
+                boolean inRoom = false;
+                List<Item> roomItems = gamestate.getPlayerLocation().getItems();
+                for (Item item : roomItems){
+                        if (item.getName().equals(noun)){
+                                inRoom = true;
+                                roomItems.remove(item);
+                                break;
+                        }
+                }
+                if(inRoom) {
                         //add item to inventory
                         player.addToInventory(noun);
                         printInventory();
-                        resultPrinter.println("Items in location: " + gamestate.getPlayerLocation().getItems());
+                        resultPrinter.println("Items in location: " + roomItems);
                 } else {
                         resultPrinter.println("Item " + noun + " not found in " + gamestate.getPlayerLocation());
                 }
