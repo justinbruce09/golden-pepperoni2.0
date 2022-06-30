@@ -227,9 +227,13 @@ public class PizzaQuestApp {
 
         //removes item from inventory
         if (gamestate.getPlayerLocation().npc != null && inInventory) {
-            //Look into a getIndex or similar method.
-            reputation += gamestate.getPlayerLocation().npc.processItem(noun);
+            int reputationReward = gamestate.getPlayerLocation().npc.processItem(noun);
+            reputation += reputationReward;
+            if(reputationReward > 0 && gamestate.getPlayerLocation().npc.getReward() != null){
+                player.addToInventory(gamestate.getPlayerLocation().npc.getReward());
+            }
         }
+
     }
 
     //mock gamestate, location.items, player.inventory
