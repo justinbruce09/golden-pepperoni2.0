@@ -6,11 +6,11 @@ public class Item {
     String room;
     String description;
 
-    public Item (String name) {
+    public Item(String name) {
         this.name = name;
     }
 
-    public Item (String name, String type, String room){
+    public Item(String name, String type, String room) {
         this.name = name;
         this.type = type;
         this.room = room;
@@ -22,7 +22,8 @@ public class Item {
         this.room = room;
         this.description = description;
     }
-// accessor methods
+
+    // accessor methods
     public String getName() {
         return name;
     }
@@ -35,10 +36,12 @@ public class Item {
         return room;
     }
 
-    public String getDescription() {return description; }
+    public String getDescription() {
+        return description;
+    }
 
     @Override
-    public String toString(){
-        return  getName();
+    public String toString() {
+        return getName();
     }
 }
