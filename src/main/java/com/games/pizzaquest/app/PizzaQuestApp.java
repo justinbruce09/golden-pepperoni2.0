@@ -19,6 +19,10 @@ public class PizzaQuestApp {
         PizzaQuestApp.scanner = scanner;
     }
 
+    public int getReputation() {
+        return reputation;
+    }
+
     //scanner for the game
     static Scanner scanner = new Scanner(System.in);
     //text parser for users to use
@@ -214,7 +218,7 @@ public class PizzaQuestApp {
         }
     }
 
-    private void giveItemToNpc(String noun) {
+    void giveItemToNpc(String noun) {
         boolean inInventory = false;
         Set<Item> inventory = player.getInventory();
         for (Item item : inventory) {
@@ -239,7 +243,7 @@ public class PizzaQuestApp {
     //mock gamestate, location.items, player.inventory
     //programmer.tryNotToCry();
     //programmer.cryALot();
-    private void takeItem(String noun) {
+    void takeItem(String noun) {
         boolean inRoom = false;
         List<Item> roomItems = gamestate.getPlayerLocation().getItems();
         for (Item item : roomItems) {
