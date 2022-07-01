@@ -32,19 +32,19 @@ public class PizzaQuestApp {
     private static final String locationFilePath = "gamemap.json";
     private static final String textFilePath = "instructions.json";
     private static final String itemFilePath = "items.json";
-    private static final PizzaPrinter inventoryPrinter = PizzaPrinter.SOUT;
-    private static final PizzaPrinter questPrinter = PizzaPrinter.SOUT;
-    private static final PizzaPrinter locationPrinter = PizzaPrinter.SOUT;
-    private static final PizzaPrinter welcomePrinter = PizzaPrinter.SOUT;
-    public static final PizzaPrinter resultPrinter = PizzaPrinter.SOUT;
-    private static final PizzaPrinter turnPrinter = PizzaPrinter.SOUT;
-    private static final PizzaPrinter reputationPrinter = PizzaPrinter.SOUT;
-    public static final PizzaPrinter helpPrinter = PizzaPrinter.SOUT;
+    private static final PizzaPrinter inventoryPrinter = PizzaPrinter.INVENTORY;
+    private static final PizzaPrinter questPrinter = PizzaPrinter.QUEST_LOG;
+    private static final PizzaPrinter locationPrinter = PizzaPrinter.LOCATION;
+    public static final PizzaPrinter welcomePrinter = PizzaPrinter.WELCOME;
+    public static final PizzaPrinter resultPrinter = PizzaPrinter.RESULT;
+    private static final PizzaPrinter turnPrinter = PizzaPrinter.TURN;
+    private static final PizzaPrinter reputationPrinter = PizzaPrinter.REPUTATION;
+    public static final PizzaPrinter helpPrinter = PizzaPrinter.HELP;
 
 
     //track turn may be moved to player
     private int turns = 0;
-    static final int END_OF_TURNS = 10;
+    public static final int END_OF_TURNS = 10;
     static final int WINNING_REPUTATION = 40;
     public final List<String> itemList = List.of("pizza_cutter", "olive_oil", "prosciutto", "wine_glass", "lemons", "coin", "ancient_pizza_cookbook", "moped", "cannoli", "marble_sculpture", "espresso");
 
@@ -144,10 +144,11 @@ public class PizzaQuestApp {
 
     public String enterName(String nameInput) {
         String playerName = nameInput;
-        return ("Ciao " + playerName + " you are in " + gamestate.getPlayerLocation());
+        locationPrinter.println(" you are in " + gamestate.getPlayerLocation());
+        return ("Ciao " + playerName);
     }
 
-    private void quitGame() {
+    public void quitGame() {
         welcomePrinter.println("You'll always have a pizza our heart ... Goodbye!");
         setGameOver(true);
         System.exit(0);
@@ -419,5 +420,9 @@ public class PizzaQuestApp {
         } else {
             return inputStream;
         }
+    }
+
+    public int getTurns() {
+        return turns;
     }
 }
