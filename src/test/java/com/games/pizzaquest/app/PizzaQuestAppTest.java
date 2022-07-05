@@ -4,6 +4,7 @@ import com.games.pizzaquest.objects.Gamestate;
 import com.games.pizzaquest.objects.Item;
 import com.games.pizzaquest.objects.Location;
 import com.games.pizzaquest.objects.NonPlayerCharacter;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,5 +94,35 @@ public class PizzaQuestAppTest {
         assertEquals(3, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
     }
 
+    @Test
+    public void takeItem_takesOnlyOneOfItemIfItemHasSameName_whenItemInSameLocation() {
+        pizzaQuestApp.takeItem("coin");
+        //tests to ensure take brought room inventory from 3 -> 2
+        assertEquals(2, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
+        //ensures player inventory item only at 1 (i.e. took 1 of 2 coins)
+        assertEquals(1,pizzaQuestApp.player.getInventory().size());
+        // true if item in inventory has name "coin"
+        assertTrue(pizzaQuestApp.player.getInventory().removeIf(item -> item.getName().equals("coin")));
+        // shows 1 of 2 "coin" items still in remove after taking a single coin
+        assertTrue(pizzaQuestApp.gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals("coin")));
+        // done to demonstrate "pizza" still exists in room
+        assertTrue(pizzaQuestApp.gamestate.getPlayerLocation().getItems().removeIf(item -> item.getName().equals("pizza")));
+    }
 
+    @Test
+    public void takeItem_takesRequestedItem_whenProperNameUsed() {
+        pizzaQuestApp.takeItem("pizza");
+        assertEquals(2, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
+        assertEquals(1,pizzaQuestApp.player.getInventory().size());
+        assertTrue(pizzaQuestApp.player.getInventory().removeIf(item -> item.getName().equals("pizza")));
+    }
+
+    @Test
+    public void takeItem_doesNotTakeRequestedItem_whenMisspelled() {
+        pizzaQuestApp.takeItem("peet-za");
+        assertEquals(3, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
+        assertNotEquals(1, pizzaQuestApp.player.getInventory().size());
+        assertFalse(pizzaQuestApp.player.getInventory().removeIf(item -> item.getName().equals("peet-za")));
+        assertFalse(pizzaQuestApp.player.getInventory().removeIf(item -> item.getName().equals("pizza")));
+    }
 }
