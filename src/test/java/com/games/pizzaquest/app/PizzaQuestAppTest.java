@@ -91,6 +91,7 @@ public class PizzaQuestAppTest {
     public void takeItem_addsNothingToInventory_whenItemNotInLocation() throws Exception {
         pizzaQuestApp.takeItem("spoon");
         assertEquals(0, pizzaQuestApp.player.getInventory().size());
+        assertEquals(3, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
     }
 
     @Test
