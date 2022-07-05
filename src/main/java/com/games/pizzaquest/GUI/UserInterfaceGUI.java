@@ -93,7 +93,7 @@ public class UserInterfaceGUI implements ActionListener {
         frame.setTitle("PizzaQuest");//title of the window
         frame.pack();//sets window to match certain size
         frame.setVisible(true);//set the window to be visible and in focus
-        frame.setSize(1200, 750);
+        frame.setSize(1200, 790);
 
 
         pizzaQuestApp.gameInstructions();

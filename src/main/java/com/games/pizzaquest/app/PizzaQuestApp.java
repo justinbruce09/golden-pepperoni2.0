@@ -104,6 +104,10 @@ public class PizzaQuestApp {
     }
 
     public void turnLogic(String input) {
+        if(isGameOver()){
+            System.exit(0);
+        }
+        resultPrinter.println();
         processCommands(parser.parse(input));
         checkIfGameIsWon();
         // Increment turns by 1
@@ -151,7 +155,6 @@ public class PizzaQuestApp {
     public void quitGame() {
         welcomePrinter.println("You'll always have a pizza our heart ... Goodbye!");
         setGameOver(true);
-        System.exit(0);
     }
 
     public boolean isGameOver() {
@@ -238,7 +241,7 @@ public class PizzaQuestApp {
                 player.addToInventory(gamestate.getPlayerLocation().npc.getReward());
             }
         }
-
+        printInventory();
     }
 
     //mock gamestate, location.items, player.inventory
@@ -296,6 +299,7 @@ public class PizzaQuestApp {
             locationPrinter.println("\n");
             turns++;
         } else {
+            locationPrinter.println(player.look(gamestate.getPlayerLocation()));
             resultPrinter.println("There is nothing that way!");
         }
     }
@@ -312,7 +316,7 @@ public class PizzaQuestApp {
     private void talk(String noun) {
         Location playerLocation = gamestate.getPlayerLocation();
         if (playerLocation.npc != null && playerLocation.npc.getName().equals(noun)) {
-            questPrinter.print(playerLocation.npc.giveQuest() + "\n");
+            questPrinter.print(playerLocation.npc.getName() + ": " + playerLocation.npc.giveQuest() + "\n");
         } else {
             resultPrinter.println("That player many not be in in this room or even exist!");
         }
