@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.nio.file.Path;
 
 
 public class UserInterfaceGUI implements ActionListener {
@@ -35,8 +36,23 @@ public class UserInterfaceGUI implements ActionListener {
         field = new JTextField();
         JButton button = new JButton("Submit");
         button.addActionListener(this);
+        //main panel for display
         panel = new JPanel();// sets panel to a new panel
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        //map panel
+        Path filePath = Path.of("./src/main/resources/pizza_quest_map.png");
+        System.out.println(filePath.toAbsolutePath());
+
+        JPanel mapPanel = new JPanel();
+        try{
+            ImageIcon mapImage = new ImageIcon(filePath.toUri().toURL());
+            JLabel mapLabel = new JLabel(mapImage);
+            mapPanel.add(mapLabel);
+            mapLabel.setVisible(true);
+        }catch(Exception e){}
+
+        // frame.add(mapPanel);
+
         //sets the border of UI
         panel.setLayout(new GridLayout(3, 4, 1, 1));// gives rows and columns to UI
         JPanel panel2 = new JPanel();
@@ -44,6 +60,13 @@ public class UserInterfaceGUI implements ActionListener {
         panel2.add(field); //adds text field to panel
         panel2.add(button);//adds button to panel
         panel.setBounds(10,10,200,200);
+
+        // layout Panel
+        JPanel layoutPanel = new JPanel();
+        layoutPanel.setLayout(new GridLayout(1, 3, 1,1));
+        layoutPanel.add(panel);
+        layoutPanel.add(mapPanel);
+        frame.add(layoutPanel);
 //        panel.setSize(200, 200);
 
 
@@ -71,15 +94,16 @@ public class UserInterfaceGUI implements ActionListener {
         //TODO: make decision on what do do with the map and it will go here
 //        JPanel panel3 = new JPanel();
 //        frame.add(panel3);
+//        frame.add(new ImagePanel());
 
 
         //regular setup to GUI
-        frame.add(panel, BorderLayout.CENTER);//adds panel to frame
+        //frame.add(panel, BorderLayout.CENTER);//adds panel to frame
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//sets behavior of closing panel
         frame.setTitle("PizzaQuest");//title of the window
         frame.pack();//sets window to match certain size
         frame.setVisible(true);//set the window to be visible and in focus
-        frame.setSize(600, 500);
+        frame.setSize(1200, 750);
 
 
 
