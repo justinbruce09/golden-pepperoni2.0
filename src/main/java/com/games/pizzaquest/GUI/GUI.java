@@ -14,7 +14,7 @@ class GUI implements ActionListener {
     private JPanel panel; //creates a new UI
     private JTextField field; // creates a new text field
     //GUI constructor
-    public GUI(){
+    public void GUI(){
         frame = new JFrame();// sets frame to a new frame
         field = new JTextField("Enter command here", 30); //sets field to a new field and the size of it and default text
         JButton button = new JButton("Submit");//creates a button in panel

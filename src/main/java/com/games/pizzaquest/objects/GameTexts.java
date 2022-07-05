@@ -18,8 +18,8 @@ public class GameTexts {
     // Create a method that will print all the GameText in the ArrayList
     public void displayCommands() {
         PizzaQuestApp.helpPrinter.print("You must use the following commands to navigate: \n\n");
-        for (GameText gt: texts) {
-           gt.printHelp();
+        for (GameText gt : texts) {
+            gt.printHelp();
             PizzaQuestApp.helpPrinter.print("\n");
         }
     }
