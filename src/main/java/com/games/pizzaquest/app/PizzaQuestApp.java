@@ -137,7 +137,7 @@ public class PizzaQuestApp {
         }
     }
 
-    private void gameInstructions() {
+    public void gameInstructions() {
         gameTexts.displayCommands();
 
     }
