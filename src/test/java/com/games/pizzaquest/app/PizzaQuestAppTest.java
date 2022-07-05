@@ -55,7 +55,7 @@ public class PizzaQuestAppTest {
         pizzaQuestApp.gamestate.getPlayerLocation().setNpc(npc);
         pizzaQuestApp.takeItem("coin");
         pizzaQuestApp.giveItemToNpc("coin");
-        assertEquals(2, pizzaQuestApp.player.getInventory().size());
+        assertEquals(1, pizzaQuestApp.player.getInventory().size());
         assertTrue(pizzaQuestApp.player.getInventory().removeIf(item -> item.getName().equals("trophy")));
     }
 
@@ -88,9 +88,15 @@ public class PizzaQuestAppTest {
 
 
     @org.junit.Test
-    public void takeItem_changesNothing_whenItemNotInLocation() throws Exception {
+    public void takeItem_addsNothingToInventory_whenItemNotInLocation() throws Exception {
         pizzaQuestApp.takeItem("spoon");
         assertEquals(0, pizzaQuestApp.player.getInventory().size());
+    }
+
+    @Test
+    public void takeItem_removesNothingFromLocation_whenItemNotInLocation() {
+        pizzaQuestApp.takeItem("spoon");
+        assertEquals(3, pizzaQuestApp.gamestate.getPlayerLocation().getItems().size());
     }
 
     @Test
