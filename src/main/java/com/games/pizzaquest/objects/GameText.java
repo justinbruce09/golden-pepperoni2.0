@@ -33,7 +33,7 @@ public class GameText {
     }
 
     public void printHelp() {
-        String help = "\"" + command +  translateOption() + "\" " + description + ".";
+        String help = "\"" + command + translateOption() + "\" " + description + ".";
         PizzaQuestApp.helpPrinter.print(help);
 
 

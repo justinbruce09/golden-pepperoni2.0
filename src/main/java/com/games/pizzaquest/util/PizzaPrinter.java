@@ -1,33 +1,36 @@
 package com.games.pizzaquest.util;
 
+import com.games.pizzaquest.GUI.UserInterfaceGUI;
+
 import javax.swing.*;
 
 public enum PizzaPrinter {
     SOUT(null),
-    INVENTORY(new JLabel()),
-    QUEST_LOG(new JLabel()),
-    LOCATION(new JLabel()),
-    WELCOME(new JLabel()),
-    RESULT(new JLabel()),
-    TURN(new JLabel()),
-    REPUTATION(new JLabel()),
-    HELP(new JLabel());
+    WELCOME(new JTextArea()),
+    INVENTORY(new JTextArea()),
+    QUEST_LOG(new JTextArea()),
+    LOCATION(new JTextArea()),
+    HELP(new JTextArea()),
+    RESULT(new JTextArea()),
+    REPUTATION(new JTextArea()),
+    TURN(new JTextArea());
 
-    private JLabel target;
+    private JTextArea target;
     private boolean newLine = true;
+//    private static UserInterfaceGUI GUI = UserInterfaceGUI.getInstance();
 
-    JLabel getTarget(){
+    public JTextArea getTarget() {
         return target;
     }
 
-    void setTargetLocationAndSize(int x, int y, int height, int width){
-        if(target != null) {
+    void setTargetLocationAndSize(int x, int y, int height, int width) {
+        if (target != null) {
             target.setLocation(x, y);
             target.setSize(width, height);
         }
     }
 
-    PizzaPrinter(JLabel target){
+    PizzaPrinter(JTextArea target) {
         this.target = target;
     }
 
@@ -35,30 +38,21 @@ public enum PizzaPrinter {
         println("");
     }
 
-    public void println(String text){
+    public void println(String text) {
         if (target == null) {
             System.out.println(text);
         } else {
             if (newLine) {
-                target.setText(text);
-            } else {
-                target.setText(target.getText() + text);
+                target.setText(name() + ": ");
             }
+            target.append(text);
         }
         newLine = true;
     }
 
 
-    public void print(String text){
-        if (target == null) {
-            System.out.print(text);
-        } else {
-            if (newLine) {
-                target.setText(text);
-            } else {
-                target.setText(target.getText() + text);
-            }
-        }
+    public void print(String text) {
+        println(text);
         newLine = false;
     }
 }
