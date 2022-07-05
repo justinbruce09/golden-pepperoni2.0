@@ -44,12 +44,12 @@ public class UserInterfaceGUI implements ActionListener {
         System.out.println(filePath.toAbsolutePath());
 
         JPanel mapPanel = new JPanel();
-        try{
-            ImageIcon mapImage = new ImageIcon(filePath.toUri().toURL());
-            JLabel mapLabel = new JLabel(mapImage);
-            mapPanel.add(mapLabel);
-            mapLabel.setVisible(true);
-        }catch(Exception e){}
+//        try{
+//            ImageIcon mapImage = new ImageIcon(filePath.toUri().toURL());
+//            JLabel mapLabel = new JLabel(mapImage);
+//            mapPanel.add(mapLabel);
+//            mapLabel.setVisible(true);
+//        }catch(Exception e){}
 
         // frame.add(mapPanel);
 
